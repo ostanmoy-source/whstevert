@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ══ PRIMARY SEO ══ -->
+<title>NerdBi Study Tracker | nerdbi.shop</title>
+ <link rel="icon" type="image/x-icon" href="https://image2url.com/r2/default/images/1772068018177-5941f996-7280-4aa8-bf4e-6d56a9e88b32.ico">
+<meta name="description" content="NerdBi's ultimate anime-themed study tracker. Track your sessions, manage subjects, and conquer exams with NerdBi — your nerdi study companion from nerdbi.shop. Also known as Nerdbee, Nerdi, and Nerd Bishop study planner.">
+<meta name="keywords" content="nerdbi, nerdbee, nerdi, nerd bishop, nerd bishob, study tracker, nerdbi shop, nerdbi.shop, anime study tracker, kimetsu academy, study planner, pomodoro timer, exam tracker, demon slayer study, focus tracker, nerd study app, nerdbee study, anime productivity, study dashboard">
+<meta name="author" content="NerdBi — nerdbi.shop">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nerdbi.shop">
+<!-- ══ PWA ══ -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#06040c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NerdBi">
+
+<!-- ══ OPEN GRAPH (Facebook / Discord) ══ -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nerdbi.shop">
+<meta property="og:title" content="NerdBi Study Tracker">
+<meta property="og:description" content="The nerdi way to track your studies. Anime-themed pomodoro timer, exam countdowns, subject progress and more — from nerdbi.shop (Nerdbee, Nerdi, Nerd Bishop).">
+<meta property="og:site_name" content="NerdBi — nerdbi.shop">
+<meta property="og:locale" content="en_US">
+
+<!-- ══ TWITTER CARD ══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NerdBi Study Tracker">
+<meta name="twitter:description" content="Nerdbee's anime-powered study tracker. Pomodoro, exams, subjects & streaks — nerdbi.shop">
+<meta name="twitter:site" content="@nerdbishop">
+
+<!-- ══ STRUCTURED DATA (JSON-LD) ══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "NerdBi Study Tracker",
+  "alternateName": ["Nerdbee Study Tracker", "Nerdi Study App", "Nerd Bishop Planner", "Kimetsu Academy"],
+  "url": "https://nerdbi.shop",
+  "description": "An anime-themed personal study tracker with pomodoro timer, exam countdown, subject progress tracking, streak system and more. Built for nerds, by NerdBi.",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NerdBi",
+    "url": "https://nerdbi.shop"
+  }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ══ OFFLINE FALLBACK FONTS ══ -->
+
+<!-- ══ STYLES ══ -->
+<link rel="stylesheet" href="style.css">
+
+<script>
+(function(){function _n(){return Promise.resolve({data:null,error:{message:'Offline'}});}
+function _ch(){var c={on:function(){return c;},subscribe:function(){return c;}};return c;}
+window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:function(){},signInWithPassword:_n,signUp:_n,signOut:_n,getSession:function(){return Promise.resolve({data:{session:null},error:null});}},from:function(){var q={eq:function(){return q;},neq:function(){return q;},order:function(){return q;},limit:function(){return q;},delete:function(){return q;},update:function(){return q;},then:function(r){return Promise.resolve({data:[],error:null}).then(r);}};q.select=function(){return Promise.resolve({data:[],error:null});};q.insert=_n;return q;},channel:_ch,removeChannel:function(){}};}};}());
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" onerror="window.Chart=window.Chart||{register:function(){},defaults:{}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.supabase=window.__supabaseMock"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js" onerror="window.DOMPurify={sanitize:function(s){return s.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/on\w+\s*=/gi,'')}}"></script>
+
+</head>
+<body>
+
+<!-- Floating petals -->
+<div id="petals"></div>
+
+<!-- WELCOME / THEME-SELECT OVERLAY -->
+<div id="welcomeOverlay" class="hidden">
+  <div class="welcome-box">
+    <div style="text-align:center;margin-bottom:18px">
+      <span id="welcomeJp" style="font-family:var(--font-mono);font-size:22px;color:var(--gold);letter-spacing:3px;display:block;text-shadow:0 0 20px rgba(232,192,48,0.5);margin-bottom:6px">鬼滅学院</span>
+      <div class="welcome-title">Welcome to NerdBi</div>
+      <div class="welcome-sub">Choose your universe. All your data stays — only the look changes.</div>
+    </div>
+
+    <div class="universe-grid">
+
+      <!-- BASIC / FOCUS -->
+      <div class="universe-card" id="uc-basic" onclick="selectUniverse('basic','focus-dark',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">📚</span>
+        <div class="uc-name">BASIC</div>
+        <div class="uc-tagline">Clean & minimal — just you and your work, no distractions.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="focus-dark" onclick="event.stopPropagation();selectSubTheme('basic','focus-dark',this)">🌙 Dark</button>
+          <button class="sub-btn" data-t="focus-light" onclick="event.stopPropagation();selectSubTheme('basic','focus-light',this)">☀️ Light</button>
+          <button class="sub-btn" data-t="focus-dim" onclick="event.stopPropagation();selectSubTheme('basic','focus-dim',this)">🕯 Dim</button>
+        </div>
+      </div>
+
+      <!-- DEMON SLAYER -->
+      <div class="universe-card selected" id="uc-demonslayer" onclick="selectUniverse('demonslayer','dark',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">⚔️</span>
+        <div class="uc-name">DEMON SLAYER</div>
+        <div class="uc-tagline">Set your heart ablaze — train like a Hashira of the Corps.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="dark" onclick="event.stopPropagation();selectSubTheme('demonslayer','dark',this)">🌑 Night</button>
+          <button class="sub-btn" data-t="dawn" onclick="event.stopPropagation();selectSubTheme('demonslayer','dawn',this)">🌅 Dawn</button>
+          <button class="sub-btn" data-t="mugen" onclick="event.stopPropagation();selectSubTheme('demonslayer','mugen',this)">🌀 Mugen</button>
+        </div>
+      </div>
+
+      <!-- DORAEMON -->
+      <div class="universe-card" id="uc-doraemon" onclick="selectUniverse('doraemon','doraemon',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">🔵</span>
+        <div class="uc-name">DORAEMON</div>
+        <div class="uc-tagline">The Anywhere Door is open — every study session is a new adventure.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="doraemon" onclick="event.stopPropagation();selectSubTheme('doraemon','doraemon',this)">🔵 Doraemon</button>
+        </div>
+      </div>
+
+      <!-- DEATH NOTE -->
+      <div class="universe-card" id="uc-deathnote" onclick="selectUniverse('deathnote','deathnote',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">📓</span>
+        <div class="uc-name">DEATH NOTE</div>
+        <div class="uc-tagline">I am justice — and justice demands you study. Write your fate.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="deathnote" onclick="event.stopPropagation();selectSubTheme('deathnote','deathnote',this)">📓 Death Note</button>
+        </div>
+      </div>
+      <!-- HARRY POTTER -->
+      <div class="universe-card" id="uc-harrypotter" onclick="selectUniverse('harrypotter','hogwarts',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">⚡</span>
+        <div class="uc-name">HARRY POTTER</div>
+        <div class="uc-tagline">Wit beyond measure is man's greatest treasure — choose your house and study.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="hogwarts" onclick="event.stopPropagation();selectSubTheme('harrypotter','hogwarts',this)">⚡ Hogwarts</button>
+          <button class="sub-btn" data-t="gryffindor" onclick="event.stopPropagation();selectSubTheme('harrypotter','gryffindor',this)">🦁 Gryffindor</button>
+          <button class="sub-btn" data-t="slytherin" onclick="event.stopPropagation();selectSubTheme('harrypotter','slytherin',this)">🐍 Slytherin</button>
+        </div>
+      </div>
+
+      <!-- BREAKING BAD -->
+      <div class="universe-card" id="uc-breakingbad" onclick="selectUniverse('breakingbad','heisenberg',this)">
+        <span class="uc-check">✓</span>
+        <span class="uc-icon">🎩</span>
+        <div class="uc-name">BREAKING BAD</div>
+        <div class="uc-tagline">I am the one who studies. Say my name — and say it at the top of the class.</div>
+        <div class="sub-theme-row">
+          <button class="sub-btn sub-active" data-t="heisenberg" onclick="event.stopPropagation();selectSubTheme('breakingbad','heisenberg',this)">🎩 Heisenberg</button>
+          <button class="sub-btn" data-t="lospollos" onclick="event.stopPropagation();selectSubTheme('breakingbad','lospollos',this)">🍗 Los Pollos</button>
+        </div>
+      </div>
+
+    </div>   
+
+    <div style="text-align:center;margin-top:18px">
+      <button class="btn btn-primary" style="min-width:200px;font-size:14px;padding:10px 24px" onclick="dismissWelcome()" id="welcomeBeginBtn">Begin Training ⚔</button>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3)">You can change your universe anytime in Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" class="hidden">
+  <div class="auth-box">
+    <button class="auth-close-btn" onclick="closeAuthOverlay()" title="Continue as guest">✕</button>
+    <div class="auth-logo">
+      <span class="jp">鬼滅学院</span>
+      <h2>FOCUS</h2>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Create Account</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-form active" id="loginForm">
+      <div class="auth-error" id="loginError"></div>
+      <div class="auth-success" id="loginSuccess"></div>
+      <div class="form-group"><label class="form-label">Email</label>
+        <input type="email" class="inp" id="loginEmail" placeholder="slayer@kimetsu.academy" autocomplete="email"></div>
+      <div class="form-group"><label class="form-label">Password</label>
+        <input type="password" class="inp" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="doLogin()" id="loginBtn">
+        ⚔ Begin Training
+      </button>
+      <div class="auth-divider">or</div>
+      <div class="auth-footer">No account? <a onclick="switchAuthTab('signup')">Create one</a> · <a onclick="showForgot()">Forgot password?</a></div>
+      <div style="margin-top:10px;text-align:center">
+        <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="closeAuthOverlay()">Continue as Guest (local only)</button>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="auth-form" id="signupForm">
+      <div class="auth-error" id="signupError"></div>
+      <div class="auth-success" id="signupSuccess"></div>
+      <div class="form-group"><label class="form-label">Nickname <span style="color:var(--text3)">(shown in chat)</span></label>
+        <input type="text" class="inp" id="signupName" placeholder="e.g. Tanjiro"></div>
+      <div class="form-group"><label class="form-label">Username <span style="color:var(--text3)">(unique handle for DMs)</span></label>
+        <input type="text" class="inp" id="signupUsername" placeholder="e.g. tanjiro_k" autocomplete="off"
+          oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()"></div>
+      <div class="form-group"><label class="form-label">Email</label>
+        <input type="email" class="inp" id="signupEmail" placeholder="slayer@kimetsu.academy" autocomplete="email"></div>
+      <div class="form-group"><label class="form-label">Password</label>
+        <input type="password" class="inp" id="signupPass" placeholder="Min 6 characters" autocomplete="new-password"
+          onkeydown="if(event.key==='Enter')doSignup()"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="doSignup()" id="signupBtn">
+        🌸 Join the Corps
+      </button>
+      <div class="auth-footer" style="margin-top:12px">Already a slayer? <a onclick="switchAuthTab('login')">Sign in</a></div>
+      <div style="margin-top:10px;text-align:center">
+        <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="closeAuthOverlay()">Continue as Guest (local only)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications -->
+<div class="notif" id="notif"></div>
+<div class="kbd-hud" id="kbdHud">Space Start/Pause · S Stop · Z Zen · M Manual · ? Help</div>
+
+<!-- Character Popup -->
+<div class="char-popup" id="charPopup">
+  <div class="char-avatar" id="charAvatar">🗡️</div>
+  <div class="char-bubble">
+    <button class="char-close" onclick="closeCharPopup()">✕</button>
+    <div class="char-name" id="charName">TANJIRO</div>
+    <div class="char-text" id="charText">Keep going! Every minute of studying brings you closer to your goal!</div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+<div class="modal-ov" id="sessionModal">
+  <div class="modal">
+    <div class="modal-title">⚔ Log Session — Total Concentration!</div>
+    <div class="form-group"><label class="form-label">Subject</label>
+      <div style="display:flex;gap:6px;align-items:center"><select class="inp" id="sm_subject" style="cursor:pointer;flex:1"></select><button type="button" onclick="openModal('addSubjectModal')" style="white-space:nowrap;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:11px;padding:0 10px;cursor:pointer;height:38px;flex-shrink:0" title="Add new subject">＋</button></div></div>
+    <div class="form-group"><label class="form-label">Topic / Form</label>
+      <input type="text" class="inp" id="sm_topic" placeholder="What technique did you train?"></div>
+    <div class="form-group"><label class="form-label">Session Type</label>
+      <select class="inp" id="sm_type" style="cursor:pointer">
+        <option>General</option><option>Active Recall</option><option>Reading</option>
+        <option>Problem Solving</option><option>Revision</option><option>Lecture</option>
+        <option>Writing</option><option>Research</option>
+      </select></div>
+    <div class="form-group"><label class="form-label">Focus Mastery (Concentration Breathing)</label>
+      <div class="rating-row" id="sm_focus">
+        <div class="r-btn" onclick="rate('focus',1)">1</div><div class="r-btn" onclick="rate('focus',2)">2</div>
+        <div class="r-btn sel" onclick="rate('focus',3)">3</div><div class="r-btn" onclick="rate('focus',4)">4</div>
+        <div class="r-btn" onclick="rate('focus',5)">5</div>
+      </div></div>
+    <div class="form-group"><label class="form-label">Energy (Demon Mark Activated?)</label>
+      <div class="rating-row" id="sm_energy">
+        <div class="r-btn" onclick="rate('energy',1)">1</div><div class="r-btn" onclick="rate('energy',2)">2</div>
+        <div class="r-btn sel" onclick="rate('energy',3)">3</div><div class="r-btn" onclick="rate('energy',4)">4</div>
+        <div class="r-btn" onclick="rate('energy',5)">5</div>
+      </div></div>
+    <div class="form-group"><label class="form-label">Notes (Battle Report)</label>
+      <input type="text" class="inp" id="sm_notes" placeholder="What happened in training today?"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="saveSession(true)">Skip Log</button>
+      <button class="btn btn-primary" onclick="saveSession(false)">Log Mission ⚔</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="manualModal">
+  <div class="modal">
+    <div class="modal-title">📜 Add Manual Session</div>
+    <div class="form-group"><label class="form-label">Date</label><input type="date" class="inp" id="ml_date"></div>
+    <div class="form-group"><label class="form-label">Subject</label><div style="display:flex;gap:6px;align-items:center"><select class="inp" id="ml_subject" style="cursor:pointer;flex:1"></select><button type="button" onclick="openModal('addSubjectModal')" style="white-space:nowrap;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:11px;padding:0 10px;cursor:pointer;height:38px;flex-shrink:0" title="Add new subject">＋</button></div></div>
+    <div class="form-group"><label class="form-label">Topic</label><input type="text" class="inp" id="ml_topic" placeholder="Training arc..."></div>
+    <div class="form-group"><label class="form-label">Duration (minutes)</label><input type="number" class="inp" id="ml_duration" placeholder="60" min="1"></div>
+    <div class="form-group"><label class="form-label">Session Type</label>
+      <select class="inp" id="ml_type" style="cursor:pointer">
+        <option>General</option><option>Active Recall</option><option>Reading</option>
+        <option>Problem Solving</option><option>Revision</option><option>Lecture</option>
+        <option>Writing</option><option>Research</option>
+      </select></div>
+    <div class="form-group"><label class="form-label">Focus Rating</label>
+      <div class="rating-row" id="ml_focus">
+        <div class="r-btn" onclick="rateML('focus',1)">1</div><div class="r-btn" onclick="rateML('focus',2)">2</div>
+        <div class="r-btn sel" onclick="rateML('focus',3)">3</div><div class="r-btn" onclick="rateML('focus',4)">4</div>
+        <div class="r-btn" onclick="rateML('focus',5)">5</div>
+      </div></div>
+    <div class="form-group"><label class="form-label">Notes</label><input type="text" class="inp" id="ml_notes" placeholder="Battle notes..."></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeManualModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveManualSession()">Add Session</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="addSubjectModal">
+  <div class="modal">
+    <div class="modal-title">🗡 Add Subject</div>
+    <div class="form-group"><label class="form-label">Name</label><input type="text" class="inp" id="ns_name" placeholder="e.g. Mathematics — Water Breathing"></div>
+    <div class="form-group"><label class="form-label">Breathing Style Color</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="colorPick">
+        <div class="color-swatch sel" style="background:#5a9ee8" onclick="pickColor('#5a9ee8',this)" title="Water Breathing">💧</div>
+        <div class="color-swatch" style="background:#e85020" onclick="pickColor('#e85020',this)" title="Flame Breathing">🔥</div>
+        <div class="color-swatch" style="background:#f0d840" onclick="pickColor('#f0d840',this)" title="Thunder Breathing">⚡</div>
+        <div class="color-swatch" style="background:#60c870" onclick="pickColor('#60c870',this)" title="Wind Breathing">🌪</div>
+        <div class="color-swatch" style="background:#7ad4cc" onclick="pickColor('#7ad4cc',this)" title="Mist Breathing">🌫</div>
+        <div class="color-swatch" style="background:#9b59b6" onclick="pickColor('#9b59b6',this)" title="Wisteria / Love">🌸</div>
+        <div class="color-swatch" style="background:#b09060" onclick="pickColor('#b09060',this)" title="Stone Breathing">🪨</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addSubjectModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSubject()">Add Subject</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="addExamModal">
+  <div class="modal">
+    <div class="modal-title">⚔ Add Final Selection / Deadline</div>
+    <div class="form-group"><label class="form-label">Name</label><input type="text" class="inp" id="ne_name" placeholder="e.g. Final Selection Exam"></div>
+    <div class="form-group"><label class="form-label">Date</label><input type="date" class="inp" id="ne_date"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addExamModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExam()">Add Deadline</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="addLinkModal">
+  <div class="modal">
+    <div class="modal-title">🔗 Add Quick Link</div>
+    <div class="form-group"><label class="form-label">Name</label><input type="text" class="inp" id="nl_name" placeholder="Lecture Notes"></div>
+    <div class="form-group"><label class="form-label">URL</label><input type="url" class="inp" id="nl_url" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addLinkModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLink()">Add Link</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="addProfileModal">
+  <div class="modal">
+    <div class="modal-title">👤 New Demon Slayer Profile</div>
+    <div class="form-group"><label class="form-label">Profile Name</label><input type="text" class="inp" id="np_name" placeholder="e.g. Tanjiro Mode"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('addProfileModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfile()">Begin Journey</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE EDIT MODAL -->
+<div class="modal-ov" id="profileEditModal">
+  <div class="modal">
+    <div class="modal-title">🌸 Edit Profile</div>
+    <div class="auth-error" id="profileEditError"></div>
+    <div class="auth-success" id="profileEditSuccess"></div>
+    <div class="form-group">
+      <label class="form-label">Nickname <span style="color:var(--text3)">(shown in chat)</span></label>
+      <input type="text" class="inp" id="editNickname" placeholder="Your display name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Username <span style="color:var(--text3)">(unique handle for DMs)</span></label>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-family:var(--font-mono);font-size:13px;color:var(--text3)">@</span>
+        <input type="text" class="inp" id="editUsername" placeholder="your_handle"
+          oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('profileEditModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfileEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW DM MODAL -->
+<div class="modal-ov" id="newDMModal">
+  <div class="modal">
+    <div class="modal-title">✉ New Private Message</div>
+    <div class="form-group">
+      <label class="form-label">Username of slayer to message</label>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-family:var(--font-mono);font-size:13px;color:var(--text3)">@</span>
+        <input type="text" class="inp" id="dmSearchInput" placeholder="their_username"
+          oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()"
+          onkeydown="if(event.key==='Enter')startDMFromSearch()">
+      </div>
+      <div id="dmSearchResult" style="margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--text3)"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newDMModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="startDMFromSearch()">Open Chat ✉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP WRAPPER ══ -->
+<div class="app-wrapper">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="jp">鬼滅学院</span>
+      <h1 id="sidebarTitle">Kimetsu Academy</h1>
+      <span style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;opacity:.6">nerdbi.shop</span>
+      <span id="sidebarSubtitle">Study Tracker v3</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-label" id="navLabel1">⚔ Corps</div>
+        <button class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">🏯</span><span id="navDashboard">Dashboard</span></button>
+        <button class="nav-item" onclick="nav('squads',this)"><span class="nav-icon">👥</span><span>Squad</span></button>
+        <button class="nav-item" onclick="nav('log',this)"><span class="nav-icon" id="navLogIcon">📜</span><span id="navLog">Battle Log</span></button>
+        <button class="nav-item" onclick="nav('tasks',this)"><span class="nav-icon" id="navTasksIcon">⚔</span><span id="navTasks">Missions</span></button>
+        <button class="nav-item" onclick="nav('notes',this)"><span class="nav-icon" id="navNotesIcon">📖</span><span id="navNotes">Scrolls</span></button>
+        <button class="nav-item" onclick="nav('scroll',this)"><span class="nav-icon">🐦</span><span>The Scroll</span></button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label" id="navLabel2">🌸 Insights</div>
+        <button class="nav-item" onclick="nav('analytics',this)"><span class="nav-icon">📊</span><span>Analytics</span></button>
+        <button class="nav-item" onclick="nav('heatmap',this)"><span class="nav-icon">🗓</span><span>Calendar</span></button>
+        <button class="nav-item" onclick="nav('badges',this)"><span class="nav-icon">🏅</span><span id="navBadges">Corps Marks</span></button>
+        <button class="nav-item" onclick="nav('subjects',this)"><span class="nav-icon" id="navSubjectsIcon">🗡</span><span id="navSubjects">Subjects</span></button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label" id="navLabel3">🏯 Plan</div>
+        <button class="nav-item" onclick="nav('planner',this)"><span class="nav-icon" id="navPlannerIcon">📅</span><span id="navPlanner">Arc Planner</span></button>
+        <button class="nav-item" onclick="nav('routine',this)"><span class="nav-icon">📋</span><span id="navRoutine">Routine</span></button>
+        <button class="nav-item" onclick="nav('goals',this)"><span class="nav-icon">🎯</span><span id="navGoals">Vows</span></button>
+        <button class="nav-item" onclick="nav('focus',this)"><span class="nav-icon">🧘</span><span id="navFocus">Concentration</span></button>
+        <button class="nav-item" onclick="nav('settings',this)"><span class="nav-icon">⚙</span><span>Settings</span></button>
+      </div>
+    </div>
+
+    <div style="padding:10px 12px;border-top:1px solid var(--border)">
+      <a href="/ramadan" rel="noopener"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:9px 12px;border-radius:var(--radius-sm);background:linear-gradient(135deg,rgba(232,192,48,0.15),rgba(155,89,182,0.15));border:1px solid rgba(232,192,48,0.3);color:var(--gold);font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:1px;text-decoration:none;text-transform:uppercase;transition:all .2s;cursor:pointer"
+        onmouseover="this.style.background='linear-gradient(135deg,rgba(232,192,48,0.25),rgba(155,89,182,0.25))';this.style.borderColor='rgba(232,192,48,0.6)';this.style.boxShadow='0 0 16px rgba(232,192,48,0.2)'"
+        onmouseout="this.style.background='linear-gradient(135deg,rgba(232,192,48,0.15),rgba(155,89,182,0.15))';this.style.borderColor='rgba(232,192,48,0.3)';this.style.boxShadow='none'">
+        <span style="font-size:14px">🌙</span> Ramadan Version
+      </a>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="streak-badge">
+        <span class="flame-icon">🔥</span>
+        <span class="streak-num" id="streakNum">0</span>
+        <span style="font-size:10px;color:var(--text3)">day streak</span>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button class="btn-icon" onclick="cycleTheme()" title="Change Breathing Theme" id="themeBtn">🌸</button>
+        <button class="btn-icon" onclick="openModal('manualModal')" title="Manual Log (M)">✏</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div id="syncStatus" title="Cloud sync status"><span class="sync-dot"></span><span id="syncLabel">Offline</span></div>
+        <div class="flip-clock" id="topClock">00:00:00</div>
+        <button class="btn btn-ghost btn-sm" onclick="toggleZen()">🧘 Zen Mode</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">↓ CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportJSON()">↓ JSON</button>
+        <button class="btn btn-ghost btn-sm" id="guestLoginBtn" onclick="openAuthOverlay()" title="Sign in to sync &amp; chat">🔑 Sign In</button>
+        <div class="user-chip" id="userChip" style="display:none" onclick="openModal('profileEditModal');loadProfileEditForm()">
+          <div class="user-avatar" id="userAvatar">👤</div>
+          <span id="userLabel">Slayer</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="signOutBtn" style="display:none;font-size:11px;padding:4px 8px" onclick="confirmSignOut()" title="Sign out">⏻</button>
+        <button class="btn btn-ghost btn-sm" id="pwaInstallBtn" style="display:none;border-color:var(--accent);color:var(--accent)" onclick="pwaInstall()" title="Install NerdBi as an app">📲 Install App</button>
+      </div>
+    </div>
+
+    <div class="recovery-banner" id="recoveryBanner" style="display:none">
+      ⚡ Unsaved session detected — restore your training data?
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="restoreCrash()">Restore</button>
+        <button class="btn btn-ghost btn-sm" onclick="dismissCrash()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- ══ ROUTINE ASSIGNMENT BANNER ══ -->
+    <div class="routine-assign-banner" id="routineAssignBanner" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap">
+        <span style="font-size:20px">📋</span>
+        <div>
+          <div style="font-weight:600;font-size:14px" id="routineBannerTitle">A study routine has been assigned to you!</div>
+          <div style="font-size:12px;opacity:.8" id="routineBannerDesc"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button class="btn btn-primary btn-sm" onclick="importAssignedRoutine()">⚔ Import Routine</button>
+        <button class="btn btn-ghost btn-sm" onclick="dismissRoutineBanner()">Later</button>
+      </div>
+    </div>
+
+    <!-- ══ DASHBOARD ══ -->
+    <section class="page-section active fade-in" id="page-dashboard">
+
+      <!-- ══ AI RECAP CARD ══ -->
+      <div id="recapCard" style="display:none;margin-bottom:16px;background:linear-gradient(135deg,var(--accent-dim),rgba(90,158,232,0.08));border:1px solid var(--accent);border-radius:var(--radius);padding:16px 18px;position:relative;animation:slideInBanner .4s ease">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px">🐦</span>
+            <div>
+              <div style="font-weight:700;font-size:13px;color:var(--text)">Hashira's Daily Recap</div>
+              <div id="recapTimestamp" style="font-family:var(--font-mono);font-size:9px;color:var(--text3)"></div>
+            </div>
+          </div>
+          <button class="btn-icon" style="color:var(--text3);font-size:12px;flex-shrink:0" onclick="dismissRecapCard()">✕</button>
+        </div>
+        <div id="recapBody" style="font-size:13px;color:var(--text2);line-height:1.75;white-space:pre-wrap"></div>
+      </div>
+
+      <!-- Timer Hero -->
+      <div class="timer-hero mb">
+        <div class="mode-row">
+          <button class="mode-btn active" onclick="setMode('p25',this)">25/5</button>
+          <button class="mode-btn" onclick="setMode('p50',this)">50/10</button>
+          <button class="mode-btn" onclick="setMode('sw',this)">Stopwatch</button>
+          <button class="mode-btn" onclick="setMode('custom',this)">Custom</button>
+        </div>
+        <!-- Custom timer inputs — shown only when Custom mode is active -->
+        <div id="customTimerRow" style="display:none;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:6px;margin-bottom:2px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <label style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Focus</label>
+            <input type="number" id="customFocusInput" min="1" max="180" value="45"
+              style="width:60px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:5px 8px;text-align:center;outline:none"
+              oninput="applyCustomTimes()">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">min</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <label style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Break</label>
+            <input type="number" id="customBreakInput" min="1" max="60" value="10"
+              style="width:60px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:13px;padding:5px 8px;text-align:center;outline:none"
+              oninput="applyCustomTimes()">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">min</span>
+          </div>
+        </div>
+        <div class="pomo-dots" id="pomoDots"></div>
+        <div class="timer-phase" id="timerPhase">TOTAL CONCENTRATION</div>
+        <div class="timer-display" id="timerDisp">25:00</div>
+        <div class="timer-bar"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
+        <div class="timer-meta">
+          <select class="session-type-select" id="curSubject" onchange="onSubjectChange()"><option value="">Subject…</option></select>
+          <input type="text" class="inp" id="curTopic" placeholder="Form / Topic…" style="max-width:180px" oninput="updateZenTask()">
+          <select class="session-type-select" id="curType">
+            <option>General</option><option>Active Recall</option><option>Reading</option>
+            <option>Problem Solving</option><option>Revision</option><option>Lecture</option>
+            <option>Writing</option><option>Research</option>
+          </select>
+        </div>
+        <div class="timer-controls">
+          <button class="btn btn-primary" id="startBtn" onclick="toggleTimer()">▶ Begin Training</button>
+          <button class="btn btn-secondary" onclick="stopTimer()">Stop</button>
+          <button class="btn btn-ghost btn-sm" onclick="skipPhase()">Skip →</button>
+        </div>
+        <div class="breathing-strip" id="quoteStrip">Loading breathing technique…</div>
+      </div>
+
+      <!-- ══ TODAY'S COMMAND CENTER ══ -->
+      <div class="cmd-center mb" id="cmdCenter">
+        <div class="cmd-header">
+          <div>
+            <div class="cmd-title">⚔ Today's Command Center</div>
+            <div class="cmd-date" id="cmdDate"></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="nav('routine',document.querySelector('[onclick*=\"routine\"]'))">+ Plan Session</button>
+        </div>
+        <div class="cmd-tabs">
+          <button class="cmd-tab active" onclick="switchCmdTab('sessions',this)">📅 Sessions</button>
+          <button class="cmd-tab" onclick="switchCmdTab('tasks',this)">⚔ Missions</button>
+          <button class="cmd-tab" onclick="switchCmdTab('habits',this)">🔥 Habits</button>
+        </div>
+        <div class="cmd-panel active" id="cmdPanelSessions"></div>
+        <div class="cmd-panel" id="cmdPanelTasks"></div>
+        <div class="cmd-panel" id="cmdPanelHabits"></div>
+        <div class="cmd-progress-bar"><div class="cmd-progress-fill" id="cmdProgressFill" style="width:0%"></div></div>
+        <div class="cmd-progress-label" id="cmdProgressLabel">0 of 0 complete</div>
+      </div>
+
+      <div class="grid-2 mb">
+        <div class="card">
+          <div class="card-title">Today's Training Report</div>
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-value" id="todayHrs">0m</div><div class="stat-label">Today</div></div>
+            <div class="stat-div"></div>
+            <div class="stat-item"><div class="stat-value" id="todaySess">0</div><div class="stat-label">Sessions</div></div>
+            <div class="stat-div"></div>
+            <div class="stat-item"><div class="stat-value" id="weekHrs">0h</div><div class="stat-label">This Week</div></div>
+            <div class="stat-div"></div>
+            <div class="stat-item"><div class="stat-value" id="prodMin">0m</div><div class="stat-label">Productive</div></div>
+          </div>
+
+        </div>
+
+        <!-- Breathing Rank -->
+        <div class="card">
+          <div class="card-title">Breathing Mastery — Daily Vow</div>
+          <div class="ring-row">
+            <div class="ring-wrap">
+              <svg width="96" height="96">
+                <circle cx="48" cy="48" r="40" fill="none" stroke="var(--bg4)" stroke-width="7"/>
+                <circle id="ringCircle" cx="48" cy="48" r="40" fill="none" stroke="var(--accent)" stroke-width="7"
+                  stroke-dasharray="251.33" stroke-dashoffset="251.33" transform="rotate(-90 48 48)"
+                  style="transition:stroke-dashoffset .6s ease;filter:drop-shadow(0 0 6px var(--accent-glow))"/>
+              </svg>
+              <div class="ring-label"><span class="ring-pct" id="ringPct">0%</span><span class="ring-sub">of vow</span></div>
+            </div>
+            <div style="flex:1">
+              <div class="goal-item">
+                <div class="goal-hd"><span class="goal-name">Daily Vow</span><span class="goal-txt" id="dailyGT">0/120m</span></div>
+                <div class="goal-bar"><div class="goal-fill" id="dailyGB" style="width:0%;background:var(--accent)"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-hd"><span class="goal-name">Weekly Mission</span><span class="goal-txt" id="weeklyGT">0/600m</span></div>
+                <div class="goal-bar"><div class="goal-fill" id="weeklyGB" style="width:0%;background:var(--water)"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-hd"><span class="goal-name">Missions</span><span class="goal-txt" id="taskGT">0/0</span></div>
+                <div class="goal-bar"><div class="goal-fill" id="taskGB" style="width:0%;background:var(--green)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breathing Rank Display -->
+      <div class="rank-card mb" id="rankCard">
+        <div class="rank-badge-big" id="rankEmoji">🥉</div>
+        <div class="rank-info">
+          <div class="rank-label">Current Corps Rank</div>
+          <div class="rank-title-big" id="rankTitle">Mizunoto — Lowest Rank</div>
+          <div class="rank-desc" id="rankDesc">Keep training! Every Hashira started here.</div>
+        </div>
+      </div>
+
+
+      <!-- Quick Missions -->
+      <div class="card mb">
+        <div class="card-title">Quick Add Mission</div>
+        <div class="quick-add-row" style="display:flex;gap:7px;flex-wrap:wrap">
+          <input type="text" class="inp" id="qaInput" placeholder="Mission description… (Enter to add)" onkeypress="if(event.key==='Enter')qaAdd()" style="flex:2;min-width:180px">
+          <select class="inp" id="qaPri" style="max-width:90px;cursor:pointer">
+            <option value="medium">Med</option><option value="high">Urgent</option><option value="low">Low</option>
+          </select>
+          <select class="inp" id="qaSubj" style="max-width:130px;cursor:pointer"><option value="">Subject…</option></select>
+          <button class="btn btn-primary btn-sm" onclick="qaAdd()">+ Add</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BATTLE LOG ══ -->
+    <section class="page-section fade-in" id="page-log">
+      <div class="card mb">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>📜 Mission History — click row for details</span>
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-ghost btn-sm" onclick="openModal('manualModal')">+ Manual</button>
+            <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Export CSV</button>
+          </div>
+        </div>
+        <div class="log-wrap">
+          <table class="log-table">
+            <thead><tr>
+              <th>Date</th><th>Subject</th><th>Form/Topic</th><th>Type</th>
+              <th>Duration</th><th>Focus</th><th>Energy</th><th>Productive</th>
+            </tr></thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MISSIONS ══ -->
+    <section class="page-section fade-in" id="page-tasks">
+      <div class="grid-2">
+        <div>
+          <div class="card mb">
+            <div class="card-title">⚔ New Mission</div>
+            <div class="form-group"><input type="text" class="inp" id="t_text" placeholder="Mission objective…"></div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
+              <select class="inp" id="t_pri" style="flex:1;cursor:pointer">
+                <option value="medium">Medium</option><option value="high">Urgent</option><option value="low">Low</option>
+              </select>
+              <select class="inp" id="t_subj" style="flex:1;cursor:pointer"><option value="">Subject…</option></select>
+              <input type="date" class="inp" id="t_due" style="flex:1">
+            </div>
+            <button class="btn btn-primary" onclick="addTaskFull()">⚔ Add Mission</button>
+          </div>
+        </div>
+        <div>
+          <div class="card mb">
+            <div class="card-title" style="display:flex;justify-content:space-between">
+              <span>Pending Missions</span>
+              <span id="pendCnt" style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">0</span>
+            </div>
+            <div id="allTasksList" class="task-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">✓ Completed</div>
+            <div id="doneTasksList" class="task-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SCROLLS (NOTES) ══ -->
+    <section class="page-section fade-in" id="page-notes">
+      <div class="grid-2">
+        <div>
+          <div class="card mb">
+            <div class="card-title">📖 New Scroll</div>
+            <div class="form-group"><input type="text" class="inp" id="note_title" placeholder="Scroll title…"></div>
+            <div class="form-group"><select class="inp" id="note_subj" style="cursor:pointer;margin-bottom:7px"><option value="">Subject (optional)</option></select></div>
+            <div class="note-panel">
+              <div class="note-toolbar">
+                <button class="note-tool" onclick="noteFmt('bold')"><b>B</b></button>
+                <button class="note-tool" onclick="noteFmt('italic')"><i>I</i></button>
+                <button class="note-tool" onclick="noteFmt('insertUnorderedList')">•</button>
+                <button class="note-tool" onclick="noteFmt('insertOrderedList')">1.</button>
+                <button class="note-tool" onclick="noteFmt('h2')">H</button>
+                <button class="note-tool" onclick="noteFmt('code')">&lt;/&gt;</button>
+                <button class="note-tool" onclick="noteFmt('hr')">—</button>
+                <span style="flex:1"></span>
+                <button class="note-tool" onclick="clearNoteEditor()" style="color:var(--red)">Clear</button>
+              </div>
+              <div class="note-area" id="noteEditor" contenteditable="true" placeholder="Begin writing your scroll…"></div>
+            </div>
+            <div style="display:flex;gap:7px;margin-top:10px">
+              <input type="text" class="inp" id="noteTagInput" placeholder="Add tag…" onkeypress="if(event.key==='Enter')addNoteTag()" style="flex:1">
+              <button class="btn btn-ghost btn-sm" onclick="addNoteTag()">+ Tag</button>
+            </div>
+            <div class="note-tags" id="noteTagsDisplay"></div>
+            <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="saveNote()">Save Scroll 📖</button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title" style="display:flex;justify-content:space-between">
+              Saved Scrolls
+              <input type="text" class="inp" id="noteSearch" placeholder="Search…" style="max-width:150px;font-size:12px;padding:5px 9px" oninput="renderNotes()">
+            </div>
+            <div id="notesList" class="note-list"></div>
+          </div>
+        </div>
+      </div>
+      <div id="noteViewer" style="display:none;margin-top:14px" class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="card-title" id="noteViewTitle" style="margin-bottom:0">Scroll</div>
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-ghost btn-sm" onclick="editNote()">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('noteViewer').style.display='none'">✕</button>
+          </div>
+        </div>
+        <div id="noteViewBody" style="font-size:14px;line-height:1.7;color:var(--text2)"></div>
+        <div class="note-tags" id="noteViewTags" style="margin-top:10px"></div>
+      </div>
+    </section>
+
+    <!-- ══ ANALYTICS ══ -->
+    <section class="page-section fade-in" id="page-analytics">
+      <div class="grid-2 mb">
+        <div class="card"><div class="card-title">⚔ Daily Productive Minutes (7 Days)</div><div class="chart-wrap"><canvas id="wChart"></canvas></div></div>
+        <div class="card"><div class="card-title">🗡 Subject Distribution</div><div class="chart-wrap" style="max-height:220px"><canvas id="pChart"></canvas></div></div>
+      </div>
+      <div class="grid-2 mb">
+        <div class="card"><div class="card-title">🌊 Focus & Energy Trend</div><div class="chart-wrap"><canvas id="fChart"></canvas></div></div>
+        <div class="card"><div class="card-title">🔥 Session Type Breakdown</div><div class="chart-wrap"><canvas id="tChart"></canvas></div></div>
+      </div>
+      <div class="card mb">
+        <div class="card-title" style="display:flex;justify-content:space-between">
+          Daily Battle Reports
+          <button class="btn btn-ghost btn-sm" onclick="exportJSON()">Export JSON</button>
+        </div>
+        <div id="dailyReport"></div>
+      </div>
+    </section>
+
+    <!-- ══ HEATMAP ══ -->
+    <section class="page-section fade-in" id="page-heatmap">
+      <div class="card mb">
+        <div class="card-title">🌸 Consistency Calendar — Last 52 Weeks</div>
+        <div class="heatmap-wrap">
+          <div style="display:flex;gap:2px">
+            <div><div style="height:16px"></div><div class="hm-days" id="hmDays"></div></div>
+            <div style="flex:1;overflow-x:auto">
+              <div id="hmMonths" class="hm-months" style="gap:0;margin-bottom:4px"></div>
+              <div class="heatmap" id="heatmap"></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--text3)">
+            Less <div style="width:12px;height:12px;border-radius:2px;background:var(--bg4)"></div>
+            <div class="hm-cell l1" style="width:12px;height:12px"></div>
+            <div class="hm-cell l2" style="width:12px;height:12px"></div>
+            <div class="hm-cell l3" style="width:12px;height:12px"></div>
+            <div class="hm-cell l4" style="width:12px;height:12px"></div>
+            More — Blood Demon Art Level
+          </div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card"><div class="card-title">Best Study Day</div><div id="bestDay" style="font-family:var(--font-mono);font-size:22px;color:var(--accent)">—</div></div>
+        <div class="card"><div class="card-title">🔥 Longest Streak</div><div id="longestStreak" style="font-family:var(--font-mono);font-size:22px;color:var(--accent)">0 days</div></div>
+        <div class="card"><div class="card-title">Active Weeks</div><div id="activeWeeks" style="font-family:var(--font-mono);font-size:22px;color:var(--accent)">0</div></div>
+      </div>
+    </section>
+
+    <!-- ══ CORPS MARKS (BADGES) ══ -->
+    <section class="page-section fade-in" id="page-badges">
+      <div class="card mb">
+        <div class="card-title">🏅 Demon Slayer Corps Marks & Achievements</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:14px;font-style:italic">Every mark is earned through blood, sweat, and total concentration breathing. Earn them all, and you may become a Hashira.</p>
+        <div class="badges-grid" id="badgesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ══ THE SCROLL — AI STUDY COMPANION ══ -->
+    <section class="page-section fade-in" id="page-scroll">
+
+      <!-- Top bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">🐦 Kasugai Crow · AI Study Companion</div>
+          <div style="font-size:13px;color:var(--text2)">Upload material · take rough notes · ask anything · get clean scrolls</div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <span id="scrollSessionBadge" style="display:none;font-family:var(--font-mono);font-size:10px;padding:4px 10px;border-radius:100px;background:rgba(232,68,58,0.15);border:1px solid var(--accent);color:var(--accent)">● SESSION LIVE</span>
+          <button class="btn btn-ghost btn-sm" id="scrollEndBtn" style="display:none;color:var(--red);border-color:var(--red)" onclick="endScrollSession()">End Session</button>
+        </div>
+      </div>
+
+      <!-- MODE TABS -->
+      <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:14px;width:fit-content">
+        <button class="scroll-tab active" id="stab-session" onclick="switchScrollTab('session')">📚 Study Session</button>
+        <button class="scroll-tab" id="stab-general" onclick="switchScrollTab('general')">🐦 General Q&A</button>
+        <button class="scroll-tab" id="stab-saved" onclick="switchScrollTab('saved')">📜 Saved Scrolls</button>
+      </div>
+
+      <!-- ── TAB: STUDY SESSION ── -->
+      <div id="scroll-tab-session">
+        <!-- Setup card (before session starts) -->
+        <div class="card mb" id="scrollSetupCard">
+          <div class="card-title">⚔ Begin Study Session</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div class="form-group" style="flex:1;min-width:160px;margin-bottom:0">
+              <label class="form-label">Subject</label>
+              <div style="display:flex;gap:6px;align-items:center"><select class="inp" id="scroll_subject" style="cursor:pointer;flex:1"><option value="">— Select —</option></select><button type="button" onclick="openModal('addSubjectModal')" style="white-space:nowrap;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:11px;padding:0 10px;cursor:pointer;height:38px;flex-shrink:0" title="Add new subject">＋</button></div>
+            </div>
+            <div class="form-group" style="flex:2;min-width:200px;margin-bottom:0">
+              <label class="form-label">Topic / Chapter</label>
+              <input type="text" class="inp" id="scroll_topic" placeholder="e.g. Alkenes, Chapter 4, Photosynthesis">
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="btn btn-primary" onclick="beginScrollSession()">🐦 Begin</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session active UI -->
+        <div id="scrollActiveUI" style="display:none">
+          <div class="grid-2">
+            <!-- LEFT -->
+            <div>
+              <!-- Material upload -->
+              <div class="card mb">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+                  📄 Reference Material
+                  <span style="font-family:var(--font-mono);font-size:9px;color:var(--text3)">Cleared when session ends</span>
+                </div>
+                <div id="scrollUploadZone">
+                  <div id="scrollDropZone" style="border:2px dashed var(--border);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;transition:border-color .2s"
+                    ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+                    ondragleave="this.style.borderColor='var(--border)'"
+                    ondrop="handleScrollDrop(event)"
+                    onclick="document.getElementById('scrollFileInput').click()">
+                    <div style="font-size:24px;margin-bottom:6px">📄</div>
+                    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text2);margin-bottom:3px">Drop PDF or image · or click to browse</div>
+                    <div style="font-size:11px;color:var(--text3)">Supports typed PDFs, scanned PDFs, photos of textbooks/notes</div>
+                    <input type="file" id="scrollFileInput" accept=".pdf,image/*" style="display:none" onchange="handleScrollFile(this.files[0])">
+                  </div>
+                  <button class="btn btn-ghost btn-sm" style="margin-top:8px;color:var(--text3);width:100%" onclick="skipScrollMaterial()">Skip — no material</button>
+                </div>
+                <div id="scrollMaterialLoaded" style="display:none">
+                  <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                    <span id="scrollMaterialIcon" style="font-size:20px">📄</span>
+                    <div style="flex:1;min-width:0">
+                      <div id="scrollMaterialName" style="font-size:13px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+                      <div id="scrollMaterialMeta" style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">Loading…</div>
+                    </div>
+                    <button class="btn-icon" style="color:var(--red)" onclick="clearScrollMaterial()">✕</button>
+                  </div>
+                  <div id="scrollProcessingBar" style="display:none;margin-top:8px">
+                    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-bottom:4px" id="scrollProcessingLabel">🐦 Reading…</div>
+                    <div style="height:3px;background:var(--bg4);border-radius:2px;overflow:hidden"><div style="height:100%;background:var(--accent);border-radius:2px;animation:scPulse 1.4s ease-in-out infinite alternate;width:55%"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rough notes -->
+              <div class="card mb">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+                  ✏ Rough Notes
+                  <span style="font-family:var(--font-mono);font-size:9px;color:var(--text3)">Bengali · English · Banglish — all fine</span>
+                </div>
+                <textarea id="scrollRoughNotes" style="width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;line-height:1.7;padding:12px;resize:vertical;font-family:var(--font-body);outline:none;box-sizing:border-box"
+                  placeholder="Write messily — bad grammar fine. Banglish fine.&#10;e.g. alkene er double bond ache, alkane theke beshi reactive&#10;markovnikov rule — H adds where more H already ache"></textarea>
+                <!-- Rough attachment -->
+                <div style="margin-top:8px">
+                  <input type="file" id="roughFileInput" accept="image/*,application/pdf" style="display:none" onchange="handleRoughFile(this.files[0])">
+                  <div id="roughAttachNone" style="display:flex;gap:7px;align-items:center">
+                    <button class="btn btn-ghost btn-sm" style="color:var(--text3);border:1px dashed var(--border)" onclick="document.getElementById('roughFileInput').click()">📎 Attach image / PDF</button>
+                    <span style="font-family:var(--font-mono);font-size:9px;color:var(--text3)">optional — photo of handwritten notes</span>
+                  </div>
+                  <div id="roughAttachLoaded" style="display:none;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px">
+                    <span id="roughAttachIcon" style="font-size:16px">📄</span>
+                    <div style="flex:1;min-width:0">
+                      <div id="roughAttachName" style="font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+                      <div id="roughAttachMeta" style="font-family:var(--font-mono);font-size:9px;color:var(--text3);margin-top:1px">Processing…</div>
+                    </div>
+                    <button class="btn-icon" style="color:var(--red);font-size:12px" onclick="clearRoughAttach()">✕</button>
+                  </div>
+                </div>
+                <div style="margin-top:8px;display:flex;gap:7px">
+                  <button class="btn btn-primary" style="flex:1" onclick="fixScrollNotes()" id="scrollFixBtn">🐦 Clean & Structure Notes</button>
+                  <button class="btn btn-ghost btn-sm" onclick="document.getElementById('scrollRoughNotes').value='';clearRoughAttach()" style="color:var(--text3)">Clear</button>
+                </div>
+              </div>
+
+              <!-- Session Q&A panel -->
+              <div class="card">
+                <div class="card-title" style="margin-bottom:10px">🐦 Ask During Session</div>
+                <!-- Mode buttons -->
+                <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+                  <button class="scroll-mode-btn active" id="sqmode-doubt" onclick="setScrollQMode('doubt')">❓ Doubt from material</button>
+                  <button class="scroll-mode-btn" id="sqmode-explain" onclick="setScrollQMode('explain')">💡 Explain a concept</button>
+                  <button class="scroll-mode-btn" id="sqmode-example" onclick="setScrollQMode('example')">📝 Give me examples</button>
+                  <button class="scroll-mode-btn" id="sqmode-compare" onclick="setScrollQMode('compare')">⚖ Compare two things</button>
+                  <button class="scroll-mode-btn" id="sqmode-quiz" onclick="setScrollQMode('quiz')">🎯 Quiz me</button>
+                  <button class="scroll-mode-btn" id="sqmode-summary" onclick="setScrollQMode('summary')">📋 Summarise material</button>
+                </div>
+                <div id="scrollQModeHint" style="font-size:11px;color:var(--text3);font-style:italic;margin-bottom:8px">Ask a doubt about your uploaded material or notes</div>
+                <div style="display:flex;gap:7px">
+                  <input type="text" class="inp" id="scrollSessionQ" placeholder="Type your question…" style="flex:1" onkeydown="if(event.key==='Enter')sendScrollSessionQ()">
+                  <button class="btn btn-primary" id="scrollSessionAskBtn" onclick="sendScrollSessionQ()">Ask 🐦</button>
+                </div>
+                <div id="scrollSessionQHistory" style="margin-top:10px;max-height:320px;overflow-y:auto"></div>
+              </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div>
+              <!-- Cleaned notes output -->
+              <div class="card mb" id="scrollOutputCard" style="display:none">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+                  ✨ Cleaned Scroll
+                  <div style="display:flex;gap:6px">
+                    <button class="btn btn-ghost btn-sm" onclick="saveScrollNote()" id="scrollSaveBtn">💾 Save to Subject</button>
+                    <button class="btn btn-ghost btn-sm" onclick="downloadScrollPDF()" id="scrollDownloadBtn">↓ PDF</button>
+                  </div>
+                </div>
+                <div id="scrollCleanedNotes" style="font-size:13px;line-height:1.8;color:var(--text2);white-space:pre-wrap;max-height:450px;overflow-y:auto;padding:4px"></div>
+              </div>
+
+              <!-- Generate extras from cleaned notes -->
+              <div class="card mb" id="scrollExtrasCard" style="display:none">
+                <div class="card-title" style="margin-bottom:10px">🛠 Generate from Notes</div>
+                <div style="display:flex;gap:7px;flex-wrap:wrap">
+                  <button class="btn btn-ghost btn-sm" onclick="generateFromNotes('flashcards')">🃏 Flashcards</button>
+                  <button class="btn btn-ghost btn-sm" onclick="generateFromNotes('questions')">📝 Practice Questions</button>
+                  <button class="btn btn-ghost btn-sm" onclick="generateFromNotes('mindmap')">🗺 Mind Map Outline</button>
+                  <button class="btn btn-ghost btn-sm" onclick="generateFromNotes('tldr')">⚡ TLDR Summary</button>
+                </div>
+                <div id="scrollExtrasOutput" style="margin-top:10px;font-size:13px;line-height:1.7;color:var(--text2);white-space:pre-wrap;max-height:300px;overflow-y:auto;display:none"></div>
+              </div>
+
+              <!-- Session info card -->
+              <div class="card" id="scrollSessionInfoCard">
+                <div class="card-title">📊 Session Info</div>
+                <div style="font-family:var(--font-mono);font-size:11px;color:var(--text2);line-height:2">
+                  <div>Subject: <span id="scrollInfoSubject" style="color:var(--accent)">—</span></div>
+                  <div>Topic: <span id="scrollInfoTopic" style="color:var(--text)">—</span></div>
+                  <div>Material: <span id="scrollInfoMaterial" style="color:var(--text3)">None</span></div>
+                  <div>Questions asked: <span id="scrollInfoQCount" style="color:var(--text)">0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: GENERAL Q&A ── -->
+      <div id="scroll-tab-general" style="display:none">
+        <div style="max-width:760px">
+          <div class="card mb">
+            <div class="card-title" style="margin-bottom:10px">🐦 Ask the Crow — General</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:12px">No session needed. Ask anything — concept explanations, study help, subject questions. Works in English, Bengali, Banglish.</div>
+
+            <!-- Quick prompt types -->
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+              <button class="scroll-mode-btn active" id="gqmode-free" onclick="setGeneralQMode('free')">💬 Free question</button>
+              <button class="scroll-mode-btn" id="gqmode-explain" onclick="setGeneralQMode('explain')">💡 Explain simply</button>
+              <button class="scroll-mode-btn" id="gqmode-diff" onclick="setGeneralQMode('diff')">⚖ Difference between</button>
+              <button class="scroll-mode-btn" id="gqmode-example" onclick="setGeneralQMode('example')">📝 Real world examples</button>
+              <button class="scroll-mode-btn" id="gqmode-steps" onclick="setGeneralQMode('steps')">🔢 Step by step</button>
+              <button class="scroll-mode-btn" id="gqmode-mnemonic" onclick="setGeneralQMode('mnemonic')">🧠 Give me a mnemonic</button>
+            </div>
+            <div id="generalQModeHint" style="font-size:11px;color:var(--text3);font-style:italic;margin-bottom:8px">Ask anything freely</div>
+
+            <!-- Optional subject context -->
+            <div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap">
+              <div style="display:flex;gap:6px;align-items:center"><select class="inp" id="generalQSubject" style="max-width:160px;cursor:pointer;font-size:12px;flex:1"><option value="">No subject context</option></select><button type="button" onclick="openModal('addSubjectModal')" style="white-space:nowrap;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:11px;padding:0 10px;cursor:pointer;height:38px;flex-shrink:0" title="Add new subject">＋</button></div>
+              <input type="text" class="inp" id="generalQTopic" placeholder="Topic context (optional)" style="flex:1;font-size:12px">
+            </div>
+
+            <div style="display:flex;gap:7px">
+              <input type="text" class="inp" id="generalQInput" placeholder="Ask anything…" style="flex:1" onkeydown="if(event.key==='Enter')sendGeneralQ()">
+              <button class="btn btn-primary" id="generalQBtn" onclick="sendGeneralQ()">Ask 🐦</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px;color:var(--text3)" onclick="clearGeneralQHistory()">Clear history</button>
+          </div>
+
+          <div id="generalQHistory"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB: SAVED SCROLLS ── -->
+      <div id="scroll-tab-saved" style="display:none">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <select class="inp" id="scrollFilterSubject" style="max-width:180px;cursor:pointer" onchange="renderScrollSavedNotes()"><option value="">All subjects</option></select>
+          <span id="scrollSavedCount" style="font-family:var(--font-mono);font-size:11px;color:var(--text3)"></span>
+        </div>
+        <div class="grid-2">
+          <div id="scrollSavedList"></div>
+          <div id="scrollSavedViewer" style="display:none">
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <div class="card-title" id="scrollViewerTitle" style="margin-bottom:0">Scroll</div>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-ghost btn-sm" onclick="downloadViewedScrollPDF()">↓ PDF</button>
+                  <button class="btn btn-ghost btn-sm" onclick="document.getElementById('scrollSavedViewer').style.display='none'">✕</button>
+                </div>
+              </div>
+              <div id="scrollViewerBody" style="font-size:13px;line-height:1.8;color:var(--text2);white-space:pre-wrap;max-height:600px;overflow-y:auto"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SUBJECTS ══ -->
+    <section class="page-section fade-in" id="page-subjects">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="color:var(--text2);font-size:13px;font-style:italic">Each subject is a breathing style — master them all.</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addSubjectModal')">🗡 Add Subject</button>
+      </div>
+      <div class="grid-auto" id="subjectCards"></div>
+    </section>
+
+    <!-- ══ ARC PLANNER ══ -->
+    <section class="page-section fade-in" id="page-planner">
+
+      <!-- TOP: Habits -->
+      <div class="card mb">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          🔥 Habits
+          <div style="display:flex;gap:5px;align-items:center">
+            <div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden">
+              <button id="hview-7" class="hview-btn active" onclick="setHabitView(7)">7d</button>
+              <button id="hview-30" class="hview-btn" onclick="setHabitView(30)">30d</button>
+              <button id="hview-180" class="hview-btn" onclick="setHabitView(180)">6mo</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="openHabitModal()">+ Add</button>
+          </div>
+        </div>
+        <div id="habitList"></div>
+      </div>
+
+      <!-- MIDDLE: Deadlines + Tasks -->
+      <div class="grid-2 mb">
+        <div class="card">
+          <div class="card-title" style="display:flex;justify-content:space-between">
+            ⚔ Deadlines & Exams
+            <button class="btn btn-ghost btn-sm" onclick="openModal('addExamModal')">+ Add</button>
+          </div>
+          <div id="examList"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Missions by Due Date</div>
+          <div id="plannerTasks" class="task-list"></div>
+        </div>
+      </div>
+
+      <!-- BOTTOM: Month Calendar -->
+      <div class="card">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="btn btn-ghost btn-sm" onclick="shiftMonth(-1)">‹</button>
+            <span id="monthCalLabel" style="font-family:var(--font-mono);font-size:11px;color:var(--text2);min-width:110px;text-align:center"></span>
+            <button class="btn btn-ghost btn-sm" onclick="shiftMonth(1)">›</button>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="goToday()">Today</button>
+        </div>
+        <div id="monthCal"></div>
+      </div>
+
+    </section>
+
+    <!-- ══ ROUTINE / STUDY PLANNER ══ -->
+    <section class="page-section fade-in" id="page-routine">
+
+      <!-- ══ AI ROUTINE GENERATOR ══ -->
+      <div class="card mb" id="aiRoutineCard">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          🤖 AI Routine Generator
+          <span style="font-family:var(--font-mono);font-size:9px;color:var(--text3)">Upload syllabus · handwritten plan · anything</span>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:14px;font-style:italic">Upload your syllabus or existing routine — Gemini reads it, asks follow-up questions, then auto-fills your study schedule.</p>
+
+        <!-- Upload zone -->
+        <div id="aiRoutineUploadZone" style="">
+          <input type="file" id="aiRoutineFileInput" accept="image/*,application/pdf" style="display:none" onchange="handleAIRoutineFile(this.files[0])">
+          <div onclick="document.getElementById('aiRoutineFileInput').click()"
+            style="border:2px dashed var(--border);border-radius:var(--radius-sm);padding:28px;text-align:center;cursor:pointer;transition:.15s"
+            onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"
+            ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+            ondragleave="this.style.borderColor='var(--border)'"
+            ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleAIRoutineFile(event.dataTransfer.files[0])">
+            <div style="font-size:28px;margin-bottom:8px">📄</div>
+            <div style="font-size:13px;color:var(--text2);font-weight:600">Drop syllabus or routine here</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:4px">Image or PDF · handwritten or printed · any format</div>
+          </div>
+        </div>
+
+        <!-- Processing bar -->
+        <div id="aiRoutineProcessing" style="display:none;margin-top:12px">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-bottom:6px" id="aiRoutineProcessLabel">🐦 Reading your file…</div>
+          <div style="height:3px;background:var(--bg4);border-radius:2px;overflow:hidden"><div style="height:100%;width:60%;background:var(--accent);border-radius:2px;animation:scPulse 1.2s linear infinite"></div></div>
+        </div>
+
+        <!-- Chat Q&A flow -->
+        <div id="aiRoutineChat" style="display:none;margin-top:14px">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+            <span id="aiRoutineFileTag" style="background:var(--bg4);border:1px solid var(--border);border-radius:100px;padding:2px 10px"></span>
+            <button class="btn-icon" style="font-size:10px;color:var(--text3)" onclick="resetAIRoutine()">✕ start over</button>
+          </div>
+          <div id="aiRoutineChatHistory" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:10px"></div>
+          <div style="display:flex;gap:7px">
+            <input type="text" id="aiRoutineChatInput" class="inp" placeholder="Reply here…" style="flex:1;font-size:13px"
+              onkeydown="if(event.key==='Enter')sendAIRoutineReply()">
+            <button class="btn btn-primary btn-sm" id="aiRoutineSendBtn" onclick="sendAIRoutineReply()">Send</button>
+          </div>
+        </div>
+
+        <!-- Apply button (shown after plan generated) -->
+        <div id="aiRoutineApplyZone" style="display:none;margin-top:14px">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px">
+            <div style="font-size:11px;font-family:var(--font-mono);color:var(--text3);margin-bottom:6px">GENERATED PLAN PREVIEW</div>
+            <div id="aiRoutinePlanPreview" style="font-size:12px;color:var(--text2);line-height:1.7;max-height:200px;overflow-y:auto;white-space:pre-wrap"></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="flex:1" onclick="applyAIRoutine()">⚔ Apply to My Schedule</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetAIRoutine()">Start Over</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date Study Planner -->
+      <div class="card mb">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          📅 Planned Study Sessions
+          <button class="btn btn-primary btn-sm" onclick="openPlanModal()">+ Plan Session</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+          <input type="date" class="inp" id="planFilterDate" style="width:auto;font-family:var(--font-mono);font-size:12px" oninput="refreshPlannedSessions()">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('planFilterDate').value='';refreshPlannedSessions()">All Dates</button>
+          <span id="planCountBadge" style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-left:auto"></span>
+        </div>
+        <div id="plannedSessionList"></div>
+      </div>
+
+      <!-- Upcoming (next 7 days) quick view -->
+      <div class="card">
+        <div class="card-title">🗓 This Week's Study Plan</div>
+        <div id="weekStudyPlan" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px"></div>
+      </div>
+    </section>
+
+    <!-- ══ VOWS (GOALS) ══ -->
+    <section class="page-section fade-in" id="page-goals">
+
+      <!-- Stat strip -->
+      <div class="vow-stat-strip mb">
+        <div class="vow-stat"><div class="vow-stat-val" id="vs-today">0m</div><div class="vow-stat-lbl">Today</div></div>
+        <div class="vow-stat-div"></div>
+        <div class="vow-stat"><div class="vow-stat-val" id="vs-week">0h</div><div class="vow-stat-lbl">This Week</div></div>
+        <div class="vow-stat-div"></div>
+        <div class="vow-stat"><div class="vow-stat-val" id="vs-total">0h</div><div class="vow-stat-lbl">All Time</div></div>
+        <div class="vow-stat-div"></div>
+        <div class="vow-stat"><div class="vow-stat-val" id="vs-streak">0</div><div class="vow-stat-lbl">🔥 Streak</div></div>
+        <div class="vow-stat-div"></div>
+        <div class="vow-stat"><div class="vow-stat-val" id="vs-rank" style="font-size:14px">—</div><div class="vow-stat-lbl">Rank</div></div>
+      </div>
+
+      <div class="grid-2 mb">
+        <!-- Set Vow -->
+        <div class="card">
+          <div class="card-title">🎯 Set Your Vow</div>
+          <p style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:16px">"I will never give up. Even if my legs give out, I will fight on with my arms."</p>
+          <div class="form-group">
+            <label class="form-label">Daily Vow (minutes)</label>
+            <input type="number" class="inp" id="g_daily" placeholder="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Weekly Mission Target (minutes)</label>
+            <input type="number" class="inp" id="g_weekly" placeholder="600">
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="saveGoals()">Swear Your Vow ⚔</button>
+        </div>
+
+        <!-- Progress -->
+        <div class="card">
+          <div class="card-title">Progress</div>
+          <div style="margin-bottom:16px">
+            <div class="goal-hd" style="margin-bottom:6px">
+              <span class="goal-name">Daily Vow</span>
+              <span class="goal-txt" id="vow-daily-txt">0 / 120m</span>
+            </div>
+            <div class="goal-bar" style="height:8px;border-radius:4px">
+              <div class="goal-fill" id="vow-daily-bar" style="width:0%;background:var(--accent);border-radius:4px;transition:width .6s ease"></div>
+            </div>
+          </div>
+          <div style="margin-bottom:16px">
+            <div class="goal-hd" style="margin-bottom:6px">
+              <span class="goal-name">Weekly Mission</span>
+              <span class="goal-txt" id="vow-weekly-txt">0 / 600m</span>
+            </div>
+            <div class="goal-bar" style="height:8px;border-radius:4px">
+              <div class="goal-fill" id="vow-weekly-bar" style="width:0%;background:var(--water);border-radius:4px;transition:width .6s ease"></div>
+            </div>
+          </div>
+          <div>
+            <div class="goal-hd" style="margin-bottom:6px">
+              <span class="goal-name">Missions Completed</span>
+              <span class="goal-txt" id="vow-task-txt">0 / 0</span>
+            </div>
+            <div class="goal-bar" style="height:8px;border-radius:4px">
+              <div class="goal-fill" id="vow-task-bar" style="width:0%;background:var(--green);border-radius:4px;transition:width .6s ease"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- This week day breakdown -->
+      <div class="card mb">
+        <div class="card-title">This Week's Training</div>
+        <div id="vowWeekBreakdown" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:4px"></div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="card">
+        <div class="card-title">Session Breakdown</div>
+        <div id="goalsSummary"></div>
+      </div>
+
+    </section>
+
+    <!-- ══ CONCENTRATION (FOCUS TOOLS) ══ -->
+    <section class="page-section fade-in" id="page-focus">
+      <div class="grid-2 mb">
+        <div class="card">
+          <div class="card-title">🎵 Ambient Sounds — Battle Atmosphere</div>
+          <div class="sound-btns mb" id="soundBtns">
+            <button class="sound-btn" onclick="toggleSound('rain',this)">🌧 Rain</button>
+            <button class="sound-btn" onclick="toggleSound('cafe',this)">☕ Café</button>
+            <button class="sound-btn" onclick="toggleSound('forest',this)">🌲 Forest</button>
+            <button class="sound-btn" onclick="toggleSound('fire',this)">🔥 Rengoku's Flames</button>
+            <button class="sound-btn" onclick="toggleSound('ocean',this)">🌊 Water Breathing</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:12px;color:var(--text2)">Volume</span>
+            <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.3" style="flex:1;accent-color:var(--accent)" oninput="setVol(this.value)">
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🧘 Total Concentration — Zen Mode</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Enter the mind of a demon slayer. Hide all distractions and breathe.</p>
+          <button class="btn btn-primary" onclick="toggleZen()">🧘 Enter Total Concentration</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:8px">Shortcut: <kbd>Z</kbd> — Exit with Escape or <kbd>Z</kbd> again</p>
+        </div>
+      </div>
+      <div class="card mb">
+        <div class="card-title" style="display:flex;justify-content:space-between">
+          🔗 Quick Links — Training Resources
+          <button class="btn btn-ghost btn-sm" onclick="openModal('addLinkModal')">+ Add</button>
+        </div>
+        <div class="links-grid" id="linksList"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎵 Lo-Fi / YouTube — Training Music</div>
+        <div style="display:flex;gap:7px;margin-bottom:10px">
+          <input type="url" class="inp" id="embedUrl" placeholder="https://www.youtube.com/embed/…">
+          <button class="btn btn-primary btn-sm" onclick="loadEmbed()">Load</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearEmbed()">Clear</button>
+        </div>
+        <div id="embedBox"></div>
+      </div>
+    </section>
+
+    <!-- ══ SETTINGS ══ -->
+    <section class="page-section fade-in" id="page-settings">
+      <div class="grid-2 mb">
+        <div class="card">
+          <div class="card-title">⏱ Timer Customization</div>
+          <div class="form-group"><label class="form-label">Custom Focus Duration (min)</label><input type="number" class="inp" id="s_focus" value="45"></div>
+          <div class="form-group"><label class="form-label">Custom Break Duration (min)</label><input type="number" class="inp" id="s_break" value="10"></div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+        <div class="card">
+          <div class="card-title">🤖 AI Daily Recap</div>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:14px">Set a daily time and the Crow will appear on your dashboard with a study recap + tomorrow's plan.</p>
+          <div class="form-group">
+            <label class="form-label">Recap Time</label>
+            <input type="time" class="inp" id="s_recapTime" value="18:00" style="font-family:var(--font-mono)">
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
+            <input type="checkbox" id="s_recapEnabled" style="accent-color:var(--accent);width:15px;height:15px">
+            <label for="s_recapEnabled" style="font-size:13px;color:var(--text2);cursor:pointer">Enable daily recap</label>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:12px;color:var(--accent)" onclick="triggerRecapNow()">🐦 Generate Recap Now</button>
+        </div>
+        <div class="card">
+          <div class="card-title">🎨 Theme — Choose Your Universe</div>
+          <div class="theme-set-label">⚔ Kimetsu Academy Themes</div>
+          <div class="theme-cards-grid">
+            <div class="theme-card" data-theme="dark" onclick="setThemeFromSettings('dark')">
+              <div class="theme-card-icon">🌑</div>
+              <div class="theme-card-name">Night Hunt</div>
+            </div>
+            <div class="theme-card" data-theme="dawn" onclick="setThemeFromSettings('dawn')">
+              <div class="theme-card-icon">🌅</div>
+              <div class="theme-card-name">Taisho Dawn</div>
+            </div>
+            <div class="theme-card" data-theme="mugen" onclick="setThemeFromSettings('mugen')">
+              <div class="theme-card-icon">🌀</div>
+              <div class="theme-card-name">Mugen Train</div>
+            </div>
+          </div>
+          <div class="theme-set-label">✦ Focus Classic Themes</div>
+          <div class="theme-cards-grid">
+            <div class="theme-card" data-theme="focus-dark" onclick="setThemeFromSettings('focus-dark')">
+              <div class="theme-card-icon">🌙</div>
+              <div class="theme-card-name">Focus Dark</div>
+            </div>
+            <div class="theme-card" data-theme="focus-light" onclick="setThemeFromSettings('focus-light')">
+              <div class="theme-card-icon">☀️</div>
+              <div class="theme-card-name">Focus Light</div>
+            </div>
+            <div class="theme-card" data-theme="focus-dim" onclick="setThemeFromSettings('focus-dim')">
+              <div class="theme-card-icon">🕯</div>
+              <div class="theme-card-name">Focus Dim</div>
+            </div>
+          </div>
+          <div class="theme-set-label">✨ Anime Guest Themes</div>
+          <div class="theme-cards-grid">
+            <div class="theme-card" data-theme="doraemon" onclick="setThemeFromSettings('doraemon')">
+              <div class="theme-card-icon">🔵</div>
+              <div class="theme-card-name">Doraemon</div>
+            </div>
+            <div class="theme-card" data-theme="doraemon-dark" onclick="setThemeFromSettings('doraemon-dark')">
+              <div class="theme-card-icon">🌌</div>
+              <div class="theme-card-name">Doraemon Night</div>
+            </div>
+            <div class="theme-card" data-theme="deathnote" onclick="setThemeFromSettings('deathnote')">
+              <div class="theme-card-icon">📓</div>
+              <div class="theme-card-name">Death Note</div>
+            </div><div class="theme-card" data-theme="hogwarts" onclick="setThemeFromSettings('hogwarts')">
+  <div class="theme-card-icon">⚡</div>
+  <div class="theme-card-name">Hogwarts</div>
+</div>
+<div class="theme-card" data-theme="gryffindor" onclick="setThemeFromSettings('gryffindor')">
+  <div class="theme-card-icon">🦁</div>
+  <div class="theme-card-name">Gryffindor</div>
+</div>
+<div class="theme-card" data-theme="slytherin" onclick="setThemeFromSettings('slytherin')">
+  <div class="theme-card-icon">🐍</div>
+  <div class="theme-card-name">Slytherin</div>
+</div>
+<div class="theme-card" data-theme="heisenberg" onclick="setThemeFromSettings('heisenberg')">
+  <div class="theme-card-icon">🎩</div>
+  <div class="theme-card-name">Heisenberg</div>
+</div>
+<div class="theme-card" data-theme="lospollos" onclick="setThemeFromSettings('lospollos')">
+  <div class="theme-card-icon">🍗</div>
+  <div class="theme-card-name">Los Pollos</div>
+</div>
+          </div>
+          <div id="currentThemeLabel" style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:14px"></div>
+          <div class="card-title">Keyboard Shortcuts</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text2);line-height:2.2">
+            <div><kbd>Space</kbd> — Start / Pause</div>
+            <div><kbd>S</kbd> — Stop timer</div>
+            <div><kbd>Z</kbd> — Total Concentration (Zen)</div>
+            <div><kbd>M</kbd> — Manual log</div>
+            <div><kbd>?</kbd> — Toggle shortcut HUD</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💾 Data Management</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="exportCSV()">↓ Export CSV</button>
+          <button class="btn btn-secondary" onclick="exportJSON()">↓ Export JSON</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">↑ Import JSON</button>
+          <button class="btn btn-ghost" onclick="clearAll()" style="color:var(--red);border-color:var(--red)">🗑 Clear Profile</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+      </div>
+    </section>
+
+  
+<!-- Tab visibility warning toast -->
+<div class="tab-warning-toast" id="tabWarningToast">
+  🌿 Your tree is wilting… come back!
+</div>
+
+<!-- ══ SQUADS PAGE ══ -->
+<section class="page-section fade-in" id="page-squads">
+
+  <!-- No squad state -->
+  <div id="squadNoSquad">
+    <div class="squad-empty-state">
+      <div class="squad-empty-icon">🌱</div>
+      <div class="squad-empty-title">Join a Squad</div>
+      <div class="squad-empty-sub">
+        Study together. Watch each other's trees grow in real time.
+        Compete, push each other, grow stronger.
+      </div>
+      <div class="squad-action-row">
+        <button class="btn btn-primary" onclick="openSquadModal('create')">⚔ Create Squad</button>
+        <button class="btn btn-secondary" onclick="openModal('joinCodeModal');document.getElementById('joinCodeInput').value='';document.getElementById('joinCodeError').style.display='none'">🔑 Join with Code</button>
+        <button class="btn btn-ghost btn-sm" onclick="openSquadBrowse()">🔍 Browse Public</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Has primary squad -->
+  <div id="squadMain" style="display:none">
+
+    <!-- Secondary squads row -->
+    <div id="secondarySquadsRow" style="margin-bottom:10px;display:none">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Also in</div>
+      <div id="secondarySquadChips"></div>
+    </div>
+
+    <!-- Squad hero banner -->
+    <div class="squad-hero">
+      <div class="squad-hero-banner">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="squad-avatar-big" id="squadAvatarBig">⚔</div>
+          <div>
+            <div class="squad-name-big" id="squadNameBig">Squad Name</div>
+            <div class="squad-meta-row">
+              <span id="squadMemberCount">0 members</span>
+              <span class="squad-live-count">
+                <span class="squad-live-dot"></span>
+                <span id="squadLiveCount">0 studying now</span>
+              </span>
+              <span id="squadDescMeta" style="color:var(--text3)"></span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-ghost btn-sm" id="squadCodeBtn" onclick="showSquadCode()" style="display:none">🔑 Code</button>
+          <button class="btn btn-ghost btn-sm" onclick="openSquadBrowse()">🔍 Browse</button>
+          <button class="btn btn-ghost btn-sm" onclick="openSquadModal('create')">+ New</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="leaveSquad()">Leave</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="squad-tabs">
+        <button class="squad-tab active" onclick="switchSquadTab('forest',this)">🌲 Forest</button>
+        <button class="squad-tab" onclick="switchSquadTab('members',this)">👥 Members</button>
+        <button class="squad-tab" onclick="switchSquadTab('leaderboard',this)">🏆 Ranks</button>
+        <button class="squad-tab" onclick="switchSquadTab('heatmap',this)">📊 Heatmap</button>
+        <button class="squad-tab" onclick="switchSquadTab('chat',this)">💬 Chat</button>
+      </div>
+
+      <!-- FOREST TAB — trees for every member -->
+      <div class="squad-panel active" id="squadPanelForest">
+        <div class="squad-forest" id="squadForest">
+          <div class="empty"><div class="empty-icon">🌱</div>Loading the forest…</div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-top:10px;letter-spacing:1px">
+          SQUAD FOREST — trees grow while members study
+        </div>
+      </div>
+
+      <!-- MEMBERS TAB — detailed cards -->
+      <div class="squad-panel" id="squadPanelMembers">
+        <div class="member-grid" id="memberGrid">
+          <div class="empty" style="grid-column:1/-1"><div class="empty-icon">👥</div>Loading…</div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="squad-panel" id="squadPanelLeaderboard">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">
+          Session Minutes — This Session (live)
+        </div>
+        <div id="squadLeaderboard"></div>
+      </div>
+
+      <!-- Heatmap -->
+      <div class="squad-panel" id="squadPanelHeatmap">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">
+          Squad combined hours this week
+        </div>
+        <div class="squad-heatmap-week" id="squadHeatmapWeek"></div>
+        <div style="margin-top:14px">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Squad stats</div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="stat-item"><div class="stat-value" id="squadTotalHrs">0h</div><div class="stat-label">Total Hours</div></div>
+            <div class="stat-div"></div>
+            <div class="stat-item"><div class="stat-value" id="squadTodayHrs">0m</div><div class="stat-label">Today Combined</div></div>
+            <div class="stat-div"></div>
+            <div class="stat-item"><div class="stat-value" id="squadSessionCount">0</div><div class="stat-label">Active Now</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Squad Chat -->
+      <div class="squad-panel" id="squadPanelChat">
+        <div class="squad-chat-messages" id="squadChatMessages">
+          <div class="chat-system-msg">⚔ Squad chat — train together, grow stronger.</div>
+        </div>
+        <div class="squad-chat-input-row">
+          <input type="text" class="chat-inp" id="squadChatInput"
+            placeholder="Message your squad…" maxlength="300"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSquadMsg()}">
+          <button class="chat-send-btn" onclick="sendSquadMsg()">↑</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Member profile slide-in panel -->
+    <div class="member-profile-overlay" id="memberProfileOverlay" onclick="closeMemberProfile(event)">
+      <div class="member-profile-panel" id="memberProfilePanel">
+        <button class="modal-close" style="position:absolute;top:14px;right:14px;font-size:18px" onclick="closeMemberProfile()">✕</button>
+        <div class="member-profile-header">
+          <div class="member-profile-avatar" id="mpAvatar">S</div>
+          <div>
+            <div class="member-profile-name" id="mpName">Slayer</div>
+            <div class="member-profile-role" id="mpRole">Member</div>
+          </div>
+          <div class="member-profile-status-badge" id="mpStatusBadge">Offline</div>
+        </div>
+        <div class="member-profile-tree-row">
+          <div class="member-profile-tree" id="mpTree">🌱</div>
+          <div>
+            <div id="mpTreeLabel" style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-bottom:4px">No active session</div>
+            <div id="mpSubject" style="font-size:14px;color:var(--accent);font-weight:600"></div>
+            <div id="mpTopic" style="font-size:12px;color:var(--text2)"></div>
+            <div id="mpElapsed" style="font-family:var(--font-mono);font-size:12px;color:var(--green);margin-top:4px"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0">
+          <div class="stat-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center">
+            <div class="stat-value" id="mpSessionMins" style="font-size:18px">0m</div>
+            <div class="stat-label">This Session</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center">
+            <div class="stat-value" id="mpTreeStage" style="font-size:18px">🌱</div>
+            <div class="stat-label">Tree Stage</div>
+          </div>
+          <div class="stat-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center">
+            <div class="stat-value" id="mpStatus" style="font-size:13px">—</div>
+            <div class="stat-label">Status</div>
+          </div>
+        </div>
+        <div id="mpAdminControls" style="display:none;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Admin Controls</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost btn-sm" style="color:var(--gold)" id="mpPromoteBtn" onclick="promoteFromProfile()">★ Promote to Admin</button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red)" id="mpKickBtn" onclick="kickFromProfile()">✕ Remove</button>
+          </div>
+        </div>
+        <input type="hidden" id="mpUserId">
+        <input type="hidden" id="mpUserNick">
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ MODAL: Create Squad ══ -->
+<div class="modal-ov" id="squadModal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title">⚔ Create a Squad</span>
+      <button class="modal-close" onclick="closeModal('squadModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Squad Name <span style="color:var(--text3)">(unique)</span></label>
+      <input type="text" class="inp" id="sq_name" placeholder="e.g. Finance Batch '26" maxlength="40">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input type="text" class="inp" id="sq_desc" placeholder="What's your squad about?" maxlength="100">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Max Members</label>
+      <select class="inp" id="sq_maxmembers">
+        <option value="5">5 — Study cell</option>
+        <option value="10" selected>10 — Study group</option>
+        <option value="20">20 — Class squad</option>
+        <option value="50">50 — Open corps</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Privacy</label>
+      <div style="display:flex;gap:8px">
+        <label style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer" id="sq_priv_public_lbl">
+          <input type="radio" name="sq_privacy" value="public" id="sq_priv_public" checked style="accent-color:var(--accent)">
+          <div><div style="font-size:13px;color:var(--text)">🌐 Public</div><div style="font-size:11px;color:var(--text3)">Browseable, join code required</div></div>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer" id="sq_priv_private_lbl">
+          <input type="radio" name="sq_privacy" value="private" id="sq_priv_private" style="accent-color:var(--accent)">
+          <div><div style="font-size:13px;color:var(--text)">🔒 Private</div><div style="font-size:11px;color:var(--text3)">Invite-only, code required</div></div>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Avatar Emoji</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="squadEmojiPicker">
+        <span class="color-swatch sel" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('⚔',this)">⚔</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('📚',this)">📚</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('🔥',this)">🔥</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('🌸',this)">🌸</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('⚡',this)">⚡</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('🧪',this)">🧪</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('💎',this)">💎</span>
+        <span class="color-swatch" style="font-size:22px;width:40px;height:40px" onclick="pickSquadEmoji('🎯',this)">🎯</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary" style="flex:1" onclick="createSquad()">Create Squad ⚔</button>
+      <button class="btn btn-secondary" onclick="closeModal('squadModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Join by Code ══ -->
+<div class="modal-ov" id="joinCodeModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <span class="modal-title">🔑 Join a Squad</span>
+      <button class="modal-close" onclick="closeModal('joinCodeModal')">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Enter the 6-character join code from your squad leader.</p>
+    <div class="form-group">
+      <label class="form-label">Join Code</label>
+      <input type="text" class="inp" id="joinCodeInput" placeholder="e.g. K9X2MF"
+        maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-family:var(--font-mono);font-size:18px;text-align:center"
+        oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+        onkeydown="if(event.key==='Enter')joinByCode()">
+    </div>
+    <div id="joinCodeError" style="font-size:12px;color:var(--red);margin-bottom:8px;display:none"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="joinByCode()" id="joinCodeBtn">Join Squad ⚔</button>
+      <button class="btn btn-secondary" onclick="closeModal('joinCodeModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Squad Code Display ══ -->
+<div class="modal-ov" id="squadCodeModal">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <div class="modal-header">
+      <span class="modal-title">🔑 Squad Join Code</span>
+      <button class="modal-close" onclick="closeModal('squadCodeModal')">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Share this code with anyone you want to invite.</p>
+    <div id="squadCodeDisplay" style="font-family:var(--font-mono);font-size:36px;font-weight:700;color:var(--accent);letter-spacing:8px;background:var(--bg3);border:2px dashed var(--accent);border-radius:var(--radius);padding:20px;margin-bottom:16px">------</div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="copySquadCode()">📋 Copy Code</button>
+    <button class="btn btn-ghost btn-sm" style="width:100%" onclick="regenerateCode()">🔄 Generate New Code</button>
+    <p style="font-size:11px;color:var(--text3);margin-top:12px">Code can only be seen and regenerated by admins.</p>
+  </div>
+</div>
+
+<!-- ══ MODAL: Kick Member ══ -->
+<div class="modal-ov" id="kickModal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <span class="modal-title">👢 Remove Member</span>
+      <button class="modal-close" onclick="closeModal('kickModal')">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:4px">Remove <strong id="kickTargetName">this member</strong> from the squad?</p>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:20px">They can rejoin with the squad code. This only removes their membership.</p>
+    <input type="hidden" id="kickTargetId">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1;background:var(--red);border-color:var(--red)" onclick="confirmKick()">Remove ⚔</button>
+      <button class="btn btn-secondary" onclick="closeModal('kickModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: Browse Squads ══ -->
+<div class="modal-ov" id="squadBrowseModal">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <span class="modal-title">🔍 Browse Public Squads</span>
+      <button class="modal-close" onclick="closeModal('squadBrowseModal')">✕</button>
+    </div>
+    <div style="background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <span style="font-size:13px;color:var(--text2)">🔑 Have a join code from a friend?</span>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('squadBrowseModal');openModal('joinCodeModal');document.getElementById('joinCodeInput').value='';document.getElementById('joinCodeError').style.display='none'">Enter Code</button>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">Public Squads (anyone can join with their code)</div>
+    <input type="text" class="inp" id="squadSearchInput" placeholder="Search squads…" oninput="searchSquads(this.value)" style="margin-bottom:12px">
+    <div id="squadBrowseList" style="max-height:320px;overflow-y:auto"></div>
+    <div style="margin-top:12px;text-align:center">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('squadBrowseModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- ═══ ZEN OVERLAY ═══ -->
+<div class="zen-overlay" id="zenOverlay" data-zen-style="A">
+
+  <!-- Style switcher — always visible top-right -->
+  <div class="zen-style-switcher">
+    <button class="zen-style-btn active" id="zenStyleA" onclick="setZenStyle('A')">Giant</button>
+    <button class="zen-style-btn" id="zenStyleB" onclick="setZenStyle('B')">Split</button>
+    <button class="zen-style-btn" id="zenStyleC" onclick="setZenStyle('C')">Ring</button>
+  </div>
+
+  <!-- ── Shared elements (used by A & default) ── -->
+  <div class="zen-phase-label" id="zenPhase">TOTAL CONCENTRATION</div>
+  <div class="zen-clock running" id="zenTimer">25:00</div>
+  <div class="zen-bar-wrap"><div class="zen-bar-fill" id="zenBar" style="width:100%"></div></div>
+  <div class="zen-task" id="zenTask">Begin your training</div>
+  <div class="zen-controls">
+    <button class="zen-btn" id="zenIcon" onclick="toggleTimer()">▶ Begin</button>
+    <button class="zen-btn" onclick="stopTimer()">Stop</button>
+    <button class="zen-btn" onclick="toggleZen()">Exit</button>
+  </div>
+  <div class="zen-exit-hint">Press Z or Escape to exit</div>
+  <div style="font-family:var(--font-body);font-style:italic;font-size:13px;color:var(--text3);margin-top:20px;max-width:400px;text-align:center" id="zenQuote"></div>
+
+  <!-- ── Mode B: Split layout ── -->
+  <div class="zen-b-left" id="zenBLeft" style="display:none">
+    <div class="zen-phase-label" id="zenPhaseB">TOTAL CONCENTRATION</div>
+    <div class="zen-clock" id="zenTimerB">25:00</div>
+    <div class="zen-bar-wrap"><div class="zen-bar-fill" id="zenBarB" style="width:100%"></div></div>
+    <div class="zen-controls" style="margin-top:8px">
+      <button class="zen-btn" id="zenIconB" onclick="toggleTimer()">▶ Begin</button>
+      <button class="zen-btn" onclick="stopTimer()">Stop</button>
+      <button class="zen-btn" onclick="toggleZen()">Exit</button>
+    </div>
+    <div class="zen-exit-hint" style="margin-top:4px">Z or Esc to exit</div>
+  </div>
+  <div class="zen-b-right" id="zenBRight" style="display:none">
+    <div class="zen-b-task-block">
+      <div class="zen-b-task-label">Current Task</div>
+      <div class="zen-b-task-val" id="zenTaskB">Begin your training</div>
+    </div>
+    <div class="zen-b-quote-area">
+      <div class="zen-b-quote-text" id="zenQuoteB">Loading…</div>
+      <div class="zen-b-quote-attr" id="zenQuoteAttrB">— NerdBi</div>
+    </div>
+    <div class="zen-b-tip" id="zenBTip">Quote rotates every 60s</div>
+  </div>
+
+  <!-- ── Mode C: Ring layout ── -->
+  <div class="zen-ring-wrap" id="zenRingWrap" style="display:none">
+    <svg class="zen-ring-svg" viewBox="0 0 200 200" id="zenRingSvg">
+      <defs>
+        <linearGradient id="zenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:var(--water)"/>
+          <stop offset="100%" style="stop-color:var(--accent)"/>
+        </linearGradient>
+      </defs>
+      <circle class="zen-ring-track" cx="100" cy="100" r="88"/>
+      <circle class="zen-ring-fill" id="zenRingFill" cx="100" cy="100" r="88"
+        stroke-dasharray="553" stroke-dashoffset="0"/>
+    </svg>
+    <div class="zen-clock" id="zenTimerC">25:00</div>
+  </div>
+  <div id="zenPhaseCLabel" style="display:none" class="zen-phase-label">TOTAL CONCENTRATION</div>
+  <div class="zen-controls" id="zenControlsC" style="display:none">
+    <button class="zen-btn" id="zenIconC" onclick="toggleTimer()">▶ Begin</button>
+    <button class="zen-btn" onclick="stopTimer()">Stop</button>
+    <button class="zen-btn" onclick="toggleZen()">Exit</button>
+  </div>
+  <div class="zen-exit-hint" id="zenExitC" style="display:none">Press Z or Escape to exit</div>
+
+</div>
+
+<!-- ══ TODAY'S ROUTINE UPDATE POPUP ══ -->
+<div class="modal-ov" id="routineUpdateModal">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-header">
+      <span class="modal-title">📋 Update Today's Routine</span>
+      <button class="modal-close" onclick="closeModal('routineUpdateModal')">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Your session is logged! Which planned session does this count for?</p>
+    <div id="routineUpdateList" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto"></div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeModal('routineUpdateModal')">None of these — Skip</button>
+  </div>
+</div>
+
+<!-- ══ PLAN SESSION MODAL ══ -->
+<div class="modal-ov" id="planModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header"><span class="modal-title" id="planModalTitle">📅 Plan a Study Session</span><button class="modal-close" onclick="closePlanModal()">✕</button></div>
+    <input type="hidden" id="planEditId">
+    <div class="form-group"><label class="form-label">Subject</label>
+      <div style="display:flex;gap:6px;align-items:center"><select class="inp" id="plan_subject" style="flex:1"><option value="">— Select —</option></select><button type="button" onclick="openModal('addSubjectModal')" style="white-space:nowrap;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:11px;padding:0 10px;cursor:pointer;height:38px;flex-shrink:0" title="Add new subject">＋</button></div>
+    </div>
+    <div class="form-group"><label class="form-label">Topic / Task</label><input type="text" class="inp" id="plan_topic" placeholder="e.g. Chapter 5 revision"></div>
+    <div class="grid-2" style="gap:10px">
+      <div class="form-group"><label class="form-label">Date</label><input type="date" class="inp" id="plan_date"></div>
+      <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="inp" id="plan_duration" placeholder="60" min="5"></div>
+    </div>
+    <div class="grid-2" style="gap:10px">
+      <div class="form-group"><label class="form-label">Start Time (optional)</label><input type="time" class="inp" id="plan_time"></div>
+      <div class="form-group"><label class="form-label">Priority</label>
+        <select class="inp" id="plan_priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="inp" id="plan_notes" rows="2" placeholder="What do you want to accomplish?"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary" style="flex:1" onclick="savePlannedSession()">Save Plan ⚔</button>
+      <button class="btn btn-secondary" onclick="closePlanModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HABIT MODAL ══ -->
+<div class="modal-ov" id="habitModal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header"><span class="modal-title">🔥 New Daily Habit</span><button class="modal-close" onclick="closeModal('habitModal')">✕</button></div>
+    <div class="form-group"><label class="form-label">Habit Name</label><input type="text" class="inp" id="h_name" placeholder="e.g. Morning flashcards"></div>
+    <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="inp" id="h_icon" placeholder="📖" maxlength="2" style="width:80px"></div>
+    <div class="form-group"><label class="form-label">Target — days per week</label>
+      <select class="inp" id="h_freq"><option value="7">Every day</option><option value="6">6×/week</option><option value="5">5×/week (weekdays)</option><option value="3">3×/week</option><option value="1">Once a week</option></select>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveHabit()">Add Habit 🔥</button>
+      <button class="btn btn-secondary" onclick="closeModal('habitModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIVE CHAT ══ -->
+<div id="chatBubble" title="Corps Chat" onclick="toggleChat()" style="display:none">
+  <span id="chatBubbleIcon">💬</span>
+  <span id="chatUnread" class="chat-unread" style="display:none">0</span>
+</div>
+
+<div id="chatPanel">
+  <div class="chat-header">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:14px">⚔</span>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text);font-weight:600;letter-spacing:.5px">CORPS CHAT</div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3)" id="chatOnlineCount">Loading…</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px;align-items:center">
+      <button class="dm-ctrl-btn" id="newDMBtn" title="New private message" onclick="openNewDM()" style="display:none;font-size:13px;padding:4px 7px">✉ DM</button>
+      <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+    </div>
+  </div>
+  <!-- Guest locked state -->
+  <div id="chatGuestLock" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center">
+    <div style="font-size:36px;opacity:.4">🔒</div>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.5px">CORPS CHAT LOCKED</div>
+    <div style="font-size:13px;color:var(--text3);line-height:1.6">Sign in to chat with other Demon Slayers in real time. Private messages also require an account.</div>
+    <button class="btn btn-primary btn-sm" onclick="closeChat();openAuthOverlay()">🔑 Sign In to Chat</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-system-msg">⚔ Welcome to the Corps Chat. Train together, grow stronger.</div>
+  </div>
+  <div class="chat-input-row" id="chatInputRow">
+    <input type="text" class="chat-inp" id="chatInput" placeholder="Send a message…" maxlength="300"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg()}" />
+    <button class="chat-send-btn" onclick="sendChatMsg()">↑</button>
+  </div>
+</div>
+
+
+<!-- ══ APP SCRIPTS ══ -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
