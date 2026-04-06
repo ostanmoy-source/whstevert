@@ -20,10 +20,10 @@ function nav(page, el) {
   if(page==='settings') { document.getElementById('s_focus').value=pd().settings.customFocus||45; document.getElementById('s_break').value=pd().settings.customBreak||10; updateThemeSelectors(); }
   if(page==='scroll') setTimeout(initScrollPage, 60);
   if(window.innerWidth<=900) document.getElementById('sidebar').classList.remove('open');
-  // Clean URLs — only on real server, not local file
-  try {
-    if(window.location.protocol !== 'file:') history.pushState({page}, '', '/'+page);
-  } catch(e) {}
+  // URL routing disabled — causes 404 on refresh with GitHub Pages
+  // try {
+  //   if(window.location.protocol !== 'file:') history.pushState({page}, '', '/'+page);
+  // } catch(e) {}
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 document.addEventListener('click',e=>{ const sb=document.getElementById('sidebar'); if(window.innerWidth<=900&&sb.classList.contains('open')&&!sb.contains(e.target)&&!e.target.closest('.hamburger')) sb.classList.remove('open'); });
@@ -458,26 +458,7 @@ function init() {
   // Supabase auth listener fires separately — if session exists it upgrades to cloud mode
   // If not, user stays in local/guest mode until they choose to sign in
 
-  // ── Clean URL routing ──
-  try {
-    if(window.location.protocol !== 'file:') {
-      const _path = window.location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();
-      if(_path && PAGE_TITLES[_path]) {
-        setTimeout(()=>{
-          const btn = document.querySelector(`[onclick*="nav('${_path}'"]`);
-          nav(_path, btn);
-        }, 150);
-      }
-      window.addEventListener('popstate', e => {
-        try {
-          const pg = (e.state&&e.state.page) || window.location.pathname.replace(/^\/+|\/+$/g,'') || 'dashboard';
-          const target = PAGE_TITLES[pg] ? pg : 'dashboard';
-          const btn = document.querySelector(`[onclick*="nav('${target}'"]`);
-          nav(target, btn);
-        } catch(err){}
-      });
-    }
-  } catch(e) {}
+  // URL routing disabled — causes 404 on refresh with GitHub Pages
   if(typeof initSquads==='function') initSquads();
 }
 
@@ -2599,7 +2580,7 @@ setInterval(() => {
 init();
 
 // API key is handled server-side via Cloudflare Worker — never exposed to the browser
-const GEMINI_URL = 'https://broad-water-9abb.ostanmoy.workers.dev/gemini';
+const GEMINI_URL = 'https://gemini-nrdbi.ostanmoy.workers.dev/gemini';
 
 /* ── SESSION STATE (memory only, cleared on end) ── */
 let _sc = {
@@ -2911,13 +2892,13 @@ function buildMaterialParts() {
 }
 
 /* ── CORE GEMINI CALL ── */
-async function callGemini(parts, maxTokens=2048) {
+async function callGemini(parts) {
   const res = await fetch(GEMINI_URL, {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       contents:[{parts}],
-      generationConfig:{ temperature:0.4, maxOutputTokens:maxTokens }
+      
     })
   });
   if (!res.ok) {
@@ -3010,7 +2991,7 @@ async function fixScrollNotes() {
     const hasRoughAttach = roughAttachParts.length > 0;
     const prompt = `You are a study note cleaner. The student may write in English, Bengali, Bangla, or a mix (Banglish like "alkene er double bond ache"). Understand all of these.\n\n${matParts.length?'Use the provided reference material as context for accuracy.':'Use your subject knowledge for accuracy.'}\n\nSubject: ${_sc.subject}${_sc.topic?'\nTopic: '+_sc.topic:''}\n\nTask: Clean and restructure these rough notes. Fix errors using the material, fill small gaps, improve structure with headings and bullet points. Keep it concise and accurate. Preserve the student's language choice. Do not add content not in the material or notes.\n\nRough notes:\n${rough}`;
     const parts = [...matParts, ...roughAttachParts, {text:prompt+(hasRoughAttach?'\n\nNote: The student has also attached an image/PDF of their rough notes above. Read it and incorporate that content too.':'')}];
-    const cleaned = await callGemini(parts, 3000);
+    const cleaned = await callGemini(parts);
     document.getElementById('scrollCleanedNotes').innerHTML = mdToHtml(cleaned);
     document.getElementById('scrollOutputCard').style.display = '';
     document.getElementById('scrollExtrasCard').style.display = '';
@@ -3036,7 +3017,7 @@ async function generateFromNotes(type) {
   };
 
   try {
-    const result = await callGemini([{text: prompts[type]}], 2048);
+    const result = await callGemini([{text: prompts[type]}]);
     out.innerHTML = DOMPurify.sanitize(mdToHtml(result));
   } catch(err) { out.textContent = '❌ '+err.message; }
 }
@@ -3061,7 +3042,7 @@ async function sendGeneralQ() {
     if (topic) contextLines.push(`Topic context: ${topic}`);
     contextLines.push(`\nLanguage note: The student may write in English, Bengali, or Banglish. Respond in the same language they used.`);
     contextLines.push(`\nQuestion: ${q}`);
-    const answer = await callGemini([{text: contextLines.join('\n')}], 2048);
+    const answer = await callGemini([{text: contextLines.join('\n')}]);
     updateQAAnswer('generalQHistory', itemId, answer);
   } catch(err) {
     updateQAAnswer('generalQHistory', itemId, '❌ '+err.message);
@@ -3214,7 +3195,7 @@ Write a recap with:
 Keep the whole thing under 200 words. Be direct and practical, not fluffy.`;
 
   try {
-    const result = await callGemini([{text: prompt}], 1024);
+    const result = await callGemini([{text: prompt}]);
     body.innerHTML = mdToHtml(result);
     // Store with timestamp for 3hr expiry
     localStorage.setItem('recapContent', result);
@@ -3308,22 +3289,24 @@ async function handleAIRoutineFile(file) {
 
     // First Gemini call — identify the document and ask first follow-up question
     document.getElementById('aiRoutineProcessLabel').textContent = '🐦 Analysing your document…';
-    const systemPrompt = `You are NerdBi's Crow — an AI study planner. A student has uploaded a document.
+    const systemPrompt = `You are NerdBi's Crow - an AI study planner. A student has uploaded a document.
 
 Your job:
 1. Identify what it is (syllabus, existing routine, exam timetable, notes, etc.)
-2. Extract whatever schedule/topic information you can see
-3. Ask ONE follow-up question to gather missing info needed to build a proper study schedule
+2. Extract ALL subjects, topics, chapters, dates, and schedule info directly from the document
+3. Use whatever is in the document - do NOT ask for info that is already visible in it
+4. Only ask ONE follow-up question if something truly critical is missing (like exam date or daily study hours) and is NOT anywhere in the document
 
-Missing info might include: exam date(s), daily study hours available, days off, hard vs easy topics, subject names if unclear.
+IMPORTANT: If the document already contains chapters, topics, or a full routine - extract and use them all. Do not ask the student to re-enter what you can already read.
 
-Start your reply with a short 1-sentence summary of what you see in the document, then ask your single most important question.
+Start with a 1-sentence summary of what you see, then either ask your ONE missing question OR say you have enough info and will generate the plan next.
 
 Today's date: ${new Date().toLocaleDateString('en-GB')}
+Student's subjects in app: ${(pd().subjects||[]).map(s=>s.name).join(', ') || 'none set'}
 
-Be conversational and concise. Do NOT generate the full plan yet.`;
+Be concise. Do NOT generate the full JSON plan yet.\`;
 
-    const response = await callGemini([...parts, {text: systemPrompt}], 512);
+    const response = await callGemini([...parts, {text: systemPrompt}]);
 
     document.getElementById('aiRoutineProcessing').style.display = 'none';
     document.getElementById('aiRoutineFileTag').textContent = '📎 ' + file.name;
@@ -3385,7 +3368,7 @@ If NO: Ask ONE more follow-up question. Keep it short and conversational.
 Reply with EITHER the JSON array OR a single follow-up question. Nothing else.`;
 
   try {
-    const response = await callGemini([{text: decisionPrompt}], 2048);
+    const response = await callGemini([{text: decisionPrompt}]);
 
     // Try to parse as JSON
     let parsed = null;
