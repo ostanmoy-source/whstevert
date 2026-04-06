@@ -2599,7 +2599,7 @@ setInterval(() => {
 init();
 
 // API key is handled server-side via Cloudflare Worker — never exposed to the browser
-const GEMINI_URL = 'https://gemini-nrdbi.ostanmoy.workers.dev/gemini';
+const GEMINI_URL = 'https://broad-water-9abb.ostanmoy.workers.dev/gemini';
 
 /* ── SESSION STATE (memory only, cleared on end) ── */
 let _sc = {
