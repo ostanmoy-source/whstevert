@@ -428,7 +428,7 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
         <button class="nav-item" onclick="nav('log',this)"><span class="nav-icon" id="navLogIcon">📜</span><span id="navLog">Battle Log</span></button>
         <button class="nav-item" onclick="nav('tasks',this)"><span class="nav-icon" id="navTasksIcon">⚔</span><span id="navTasks">Missions</span></button>
         <button class="nav-item" onclick="nav('notes',this)"><span class="nav-icon" id="navNotesIcon">📖</span><span id="navNotes">Scrolls</span></button>
-        <button class="nav-item" onclick="nav('scroll',this)"><span class="nav-icon">🐦</span><span>The Scroll</span></button>
+        <button class="nav-item" onclick="nav('scroll',this)"><span class="nav-icon">🐦</span><span>AI Crow</span></button>
       </div>
       <div class="nav-section">
         <div class="nav-label" id="navLabel2">🌸 Insights</div>
@@ -466,6 +466,12 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
         <button class="btn-icon" onclick="openModal('manualModal')" title="Manual Log (M)">✏</button>
       </div>
     </div>
+    <!-- HP Spell of the Day — only visible when HP theme active -->
+    <div id="hpSpellBar" style="display:none;padding:8px 12px;border-top:1px solid var(--border);background:var(--bg3)">
+      <div style="font-family:var(--font-mono);font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">⚡ Spell of the Day</div>
+      <div id="hpSpellName" style="font-size:11px;color:var(--accent);font-weight:600"></div>
+      <div id="hpSpellEffect" style="font-size:10px;color:var(--text3);line-height:1.4;margin-top:2px"></div>
+    </div>
   </nav>
 
   <!-- MAIN -->
@@ -483,7 +489,7 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
         <button class="btn btn-ghost btn-sm" onclick="exportJSON()">↓ JSON</button>
         <button class="btn btn-ghost btn-sm" id="guestLoginBtn" onclick="openAuthOverlay()" title="Sign in to sync &amp; chat">🔑 Sign In</button>
         <div class="user-chip" id="userChip" style="display:none" onclick="openModal('profileEditModal');loadProfileEditForm()">
-          <div class="user-avatar" id="userAvatar">👤</div>
+          <div class="user-avatar" id="userAvatar" style="overflow:hidden;padding:0"><img id="userAvatarImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;border-radius:50%">👤</div>
           <span id="userLabel">Slayer</span>
         </div>
         <button class="btn btn-ghost btn-sm" id="signOutBtn" style="display:none;font-size:11px;padding:4px 8px" onclick="confirmSignOut()" title="Sign out">⏻</button>
@@ -834,6 +840,12 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
         <div class="badges-grid" id="badgesGrid"></div>
       </div>
     </section>
+    <!-- NekosBest badge celebration overlay -->
+    <div id="nekoCelebOverlay" style="display:none;position:fixed;bottom:80px;right:24px;z-index:9999;background:var(--bg2);border:1px solid var(--accent);border-radius:var(--radius);padding:12px 14px;box-shadow:0 4px 24px rgba(0,0,0,.4);max-width:200px;text-align:center;animation:slideInBanner .3s ease">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🏅 Badge Unlocked!</div>
+      <img id="nekoCelebGif" src="" alt="celebration" style="width:140px;height:140px;object-fit:cover;border-radius:var(--radius-sm)">
+      <button onclick="document.getElementById('nekoCelebOverlay').style.display='none'" style="margin-top:8px;width:100%;background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer">✕ close</button>
+    </div>
 
     <!-- ══ THE SCROLL — AI STUDY COMPANION ══ -->
     <section class="page-section fade-in" id="page-scroll">
@@ -871,9 +883,15 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
               <label class="form-label">Topic / Chapter</label>
               <input type="text" class="inp" id="scroll_topic" placeholder="e.g. Alkenes, Chapter 4, Photosynthesis">
             </div>
-            <div style="display:flex;align-items:flex-end">
+            <div style="display:flex;align-items:flex-end;gap:6px">
               <button class="btn btn-primary" onclick="beginScrollSession()">🐦 Begin</button>
+              <button class="btn btn-ghost btn-sm" onclick="findReferenceBooks()" title="Find reference books for this subject">📚 Books</button>
             </div>
+          </div>
+          <!-- Open Library results -->
+          <div id="refBooksPanel" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">📚 Reference Books — Open Library</div>
+            <div id="refBooksList" style="display:flex;gap:10px;flex-wrap:wrap"></div>
           </div>
         </div>
 
@@ -1034,8 +1052,12 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
             </div>
 
             <div style="display:flex;gap:7px">
-              <input type="text" class="inp" id="generalQInput" placeholder="Ask anything…" style="flex:1" onkeydown="if(event.key==='Enter')sendGeneralQ()">
+              <input type="text" class="inp" id="generalQInput" placeholder="Ask anything… or type one word to define it" style="flex:1" onkeydown="if(event.key==='Enter')sendGeneralQ()">
               <button class="btn btn-primary" id="generalQBtn" onclick="sendGeneralQ()">Ask 🐦</button>
+              <button class="btn btn-ghost btn-sm" id="dictLookupBtn" onclick="dictLookup()" title="Quick word definition (no AI needed)">📖 Define</button>
+            </div>
+            <div id="dictResultPanel" style="display:none;margin-top:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+              <div id="dictResultContent" style="font-size:13px;color:var(--text2);line-height:1.7"></div>
             </div>
             <button class="btn btn-ghost btn-sm" style="margin-top:8px;color:var(--text3)" onclick="clearGeneralQHistory()">Clear history</button>
           </div>
@@ -1307,6 +1329,10 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
           <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Enter the mind of a demon slayer. Hide all distractions and breathe.</p>
           <button class="btn btn-primary" onclick="toggleZen()">🧘 Enter Total Concentration</button>
           <p style="font-size:11px;color:var(--text3);margin-top:8px">Shortcut: <kbd>Z</kbd> — Exit with Escape or <kbd>Z</kbd> again</p>
+          <div style="margin-top:12px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:10px">
+            <input type="checkbox" id="zenAnimeBgToggle" style="accent-color:var(--accent);width:14px;height:14px" onchange="toggleZenAnimeBg(this.checked)">
+            <label for="zenAnimeBgToggle" style="font-size:12px;color:var(--text2);cursor:pointer">🎨 Anime background in Zen mode (Waifu.im)</label>
+          </div>
         </div>
       </div>
       <div class="card mb">
@@ -1318,6 +1344,13 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
       </div>
       <div class="card">
         <div class="card-title">🎵 Lo-Fi / YouTube — Training Music</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm music-preset-btn" onclick="loadEmbed('https://soundcloud.com/lofi-hip-hop-music/sets/lofi-hip-hop-music')">🎵 Lo-Fi Hip Hop</button>
+          <button class="btn btn-ghost btn-sm music-preset-btn" onclick="loadEmbed('https://soundcloud.com/user-942981386/sets/anime-ost-study-mix')">🎌 Anime OST</button>
+          <button class="btn btn-ghost btn-sm music-preset-btn" onclick="loadEmbed('https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1')">☕ Lo-Fi Chill</button>
+          <button class="btn btn-ghost btn-sm music-preset-btn" onclick="loadEmbed('https://www.youtube.com/embed/DWcJFNfaw9c?autoplay=1')">🌧 Rain Jazz</button>
+          <button class="btn btn-ghost btn-sm music-preset-btn" onclick="loadEmbed('https://www.youtube.com/embed/4oStw0r33so?autoplay=1')">🎹 Classical Focus</button>
+        </div>
         <div style="display:flex;gap:7px;margin-bottom:10px">
           <input type="url" class="inp" id="embedUrl" placeholder="https://www.youtube.com/embed/…">
           <button class="btn btn-primary btn-sm" onclick="loadEmbed()">Load</button>
@@ -1569,7 +1602,7 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
       <div class="member-profile-panel" id="memberProfilePanel">
         <button class="modal-close" style="position:absolute;top:14px;right:14px;font-size:18px" onclick="closeMemberProfile()">✕</button>
         <div class="member-profile-header">
-          <div class="member-profile-avatar" id="mpAvatar">S</div>
+          <div class="member-profile-avatar" id="mpAvatar" style="overflow:hidden;padding:0;display:flex;align-items:center;justify-content:center"><img id="mpAvatarImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;border-radius:50%"><span id="mpAvatarLetter">S</span></div>
           <div>
             <div class="member-profile-name" id="mpName">Slayer</div>
             <div class="member-profile-role" id="mpRole">Member</div>
@@ -1918,6 +1951,305 @@ window.__supabaseMock={createClient:function(){return{auth:{onAuthStateChange:fu
 <!-- ══ APP SCRIPTS ══ -->
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>
+// ── RESET PASSWORD FIX: override showForgot to use correct redirectTo ──
+window.showForgot = async function() {
+  const email = prompt('Enter your email to reset password:');
+  if (!email) return;
+  const { error } = await _supa.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://nerdbi.shop/reset-password.html'
+  });
+  if (error) { 
+    if (typeof notify === 'function') notify('Error: ' + error.message, 'info');
+    else alert('Error: ' + error.message);
+  } else { 
+    if (typeof notify === 'function') notify('🌸 Password reset email sent! Check your inbox.', 'success');
+    else alert('🌸 Password reset email sent! Check your inbox.');
+  }
+};
+</script>
 
+<script>
+/* ═══════════════════════════════════════════════
+   PUBLIC API INTEGRATIONS — additive only
+═══════════════════════════════════════════════ */
+
+/* ── 1. DICEBEAR — pixel-art avatars from username ── */
+function dicebearUrl(seed) {
+  return 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(seed || 'slayer');
+}
+function applyDicebearAvatar(seed, imgId, fallbackId) {
+  const img = document.getElementById(imgId);
+  const fb  = document.getElementById(fallbackId);
+  if (!img) return;
+  img.src = dicebearUrl(seed);
+  img.style.display = 'block';
+  if (fb) fb.style.display = 'none';
+}
+// Hook into auth — patch userChip display to also set avatar
+const _origShowUserChip = window.showUserChip;
+document.addEventListener('DOMContentLoaded', function() {
+  // Watch for userLabel changes to trigger avatar update
+  const userLabel = document.getElementById('userLabel');
+  if (userLabel) {
+    const obs = new MutationObserver(() => {
+      const name = userLabel.textContent || 'slayer';
+      applyDicebearAvatar(name, 'userAvatarImg', null);
+      const chip = document.getElementById('userAvatar');
+      if (chip) chip.innerHTML = '<img src="' + dicebearUrl(name) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+    });
+    obs.observe(userLabel, { childList: true, characterData: true, subtree: true });
+  }
+});
+// Squad member profile avatar
+const _origOpenMemberProfile = window.openMemberProfile;
+window.openMemberProfile = function(userId) {
+  if (_origOpenMemberProfile) _origOpenMemberProfile(userId);
+  setTimeout(() => {
+    const nameEl = document.getElementById('mpName');
+    const avatarEl = document.getElementById('mpAvatar');
+    if (nameEl && avatarEl) {
+      const seed = nameEl.textContent || userId;
+      avatarEl.innerHTML = '<img src="' + dicebearUrl(seed) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+    }
+  }, 100);
+};
+
+/* ── 2. NUMBERS API — fun fact after session ends ── */
+async function showNumbersFact(minutes) {
+  if (!minutes || minutes < 1) return;
+  try {
+    const res = await fetch('https://numbersapi.com/' + Math.round(minutes) + '/trivia?json');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.text) {
+      setTimeout(() => notify('📐 ' + data.text, 'info'), 1200);
+    }
+  } catch(e) {}
+}
+// Patch stopTimer to fire numbers fact
+const _origStopTimer = window.stopTimer;
+window.stopTimer = function() {
+  const result = _origStopTimer ? _origStopTimer.apply(this, arguments) : undefined;
+  try {
+    const lastSession = (typeof pd === 'function' && pd().sessions && pd().sessions.length)
+      ? pd().sessions[pd().sessions.length - 1] : null;
+    if (lastSession && lastSession.durationMinutes > 0) {
+      showNumbersFact(lastSession.durationMinutes);
+    }
+  } catch(e) {}
+  return result;
+};
+
+/* ── 3. USELESS FACTS — random fact in breathing strip during break ── */
+async function fetchUselessFact() {
+  try {
+    const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random?language=en');
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.text || null;
+  } catch(e) { return null; }
+}
+// Patch phase change — show fact when break starts
+const _origSetPhaseLabel = window.setPhaseLabel || null;
+let _breakFactShown = false;
+function onBreakPhaseStart() {
+  if (_breakFactShown) return;
+  _breakFactShown = true;
+  fetchUselessFact().then(fact => {
+    if (!fact) return;
+    const strip = document.getElementById('quoteStrip');
+    if (strip) {
+      strip.style.opacity = '0';
+      setTimeout(() => {
+        strip.textContent = '💡 ' + fact;
+        strip.style.opacity = '1';
+      }, 400);
+      setTimeout(() => { _breakFactShown = false; }, 30000);
+    }
+  });
+}
+// Hook into timer tick — detect break phase by checking timerPhase text
+setInterval(() => {
+  const phase = document.getElementById('timerPhase');
+  if (phase && (phase.textContent.toLowerCase().includes('break') || phase.textContent.toLowerCase().includes('rest'))) {
+    onBreakPhaseStart();
+  } else {
+    _breakFactShown = false;
+  }
+}, 3000);
+
+/* ── 4. FREE DICTIONARY API — word lookup in General Q&A ── */
+async function dictLookup() {
+  const input = document.getElementById('generalQInput');
+  const panel = document.getElementById('dictResultPanel');
+  const content = document.getElementById('dictResultContent');
+  if (!input || !panel || !content) return;
+  const word = input.value.trim().split(' ')[0];
+  if (!word) { notify('Type a word first', 'info'); return; }
+  content.innerHTML = '<span style="color:var(--text3);font-size:12px">🔍 Looking up "' + word + '"…</span>';
+  panel.style.display = 'block';
+  try {
+    const res = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
+    if (!res.ok) { content.innerHTML = '<span style="color:var(--text3)">No definition found for "' + word + '"</span>'; return; }
+    const data = await res.json();
+    const entry = data[0];
+    const phonetic = entry.phonetic || (entry.phonetics && entry.phonetics[0] && entry.phonetics[0].text) || '';
+    let html = '<div style="margin-bottom:6px"><span style="font-size:15px;font-weight:600;color:var(--text)">' + entry.word + '</span>';
+    if (phonetic) html += ' <span style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">' + phonetic + '</span>';
+    html += '</div>';
+    (entry.meanings || []).slice(0, 2).forEach(m => {
+      html += '<div style="font-size:11px;color:var(--accent);font-style:italic;margin-bottom:3px">' + m.partOfSpeech + '</div>';
+      (m.definitions || []).slice(0, 2).forEach((d, i) => {
+        html += '<div style="margin-bottom:4px;padding-left:8px;border-left:2px solid var(--border)"><span style="font-size:12px;color:var(--text2)">' + d.definition + '</span>';
+        if (d.example) html += '<br><span style="font-size:11px;color:var(--text3);font-style:italic">"' + d.example + '"</span>';
+        html += '</div>';
+      });
+    });
+    content.innerHTML = html;
+  } catch(e) {
+    content.innerHTML = '<span style="color:var(--text3)">Could not reach dictionary API</span>';
+  }
+}
+
+/* ── 5. WAIFU.IM — anime background in Zen mode ── */
+let _zenAnimeBgEnabled = localStorage.getItem('zenAnimeBg') === 'true';
+let _zenAnimeBgUrl = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const tog = document.getElementById('zenAnimeBgToggle');
+  if (tog) tog.checked = _zenAnimeBgEnabled;
+});
+function toggleZenAnimeBg(enabled) {
+  _zenAnimeBgEnabled = enabled;
+  localStorage.setItem('zenAnimeBg', enabled);
+  if (!enabled) {
+    const ov = document.getElementById('zenOverlay');
+    if (ov) ov.style.backgroundImage = '';
+  }
+}
+async function fetchWaifuBg() {
+  if (!_zenAnimeBgEnabled) return;
+  try {
+    const res = await fetch('https://api.waifu.im/search/?included_tags=waifu&is_nsfw=false');
+    if (!res.ok) return;
+    const data = await res.json();
+    const url = data.images && data.images[0] && data.images[0].url;
+    if (!url) return;
+    _zenAnimeBgUrl = url;
+    const ov = document.getElementById('zenOverlay');
+    if (ov) {
+      ov.style.backgroundImage = 'url(' + url + ')';
+      ov.style.backgroundSize = 'cover';
+      ov.style.backgroundPosition = 'center';
+    }
+  } catch(e) {}
+}
+// Patch toggleZen to fetch bg when opening
+const _origToggleZen = window.toggleZen;
+window.toggleZen = function() {
+  const result = _origToggleZen ? _origToggleZen.apply(this, arguments) : undefined;
+  const ov = document.getElementById('zenOverlay');
+  if (ov && ov.classList.contains('active')) fetchWaifuBg();
+  return result;
+};
+
+/* ── 6. NEKOSBEST — celebration GIF on badge unlock ── */
+async function showBadgeCelebration() {
+  try {
+    const res = await fetch('https://nekos.best/api/v2/pat');
+    if (!res.ok) return;
+    const data = await res.json();
+    const url = data.results && data.results[0] && data.results[0].url;
+    if (!url) return;
+    const gif = document.getElementById('nekoCelebGif');
+    const overlay = document.getElementById('nekoCelebOverlay');
+    if (gif && overlay) {
+      gif.src = url;
+      overlay.style.display = 'block';
+      setTimeout(() => { overlay.style.display = 'none'; }, 8000);
+    }
+  } catch(e) {}
+}
+// Patch refreshBadges to detect new unlocks
+let _prevUnlockedBadges = [];
+const _origRefreshBadges = window.refreshBadges;
+window.refreshBadges = function() {
+  if (_origRefreshBadges) _origRefreshBadges.apply(this, arguments);
+  try {
+    if (typeof BADGES === 'undefined' || typeof pd !== 'function') return;
+    const p = pd();
+    const nowUnlocked = BADGES.filter(b => b.check(p)).map(b => b.id);
+    const newOnes = nowUnlocked.filter(id => !_prevUnlockedBadges.includes(id));
+    if (_prevUnlockedBadges.length > 0 && newOnes.length > 0) showBadgeCelebration();
+    _prevUnlockedBadges = nowUnlocked;
+  } catch(e) {}
+};
+
+/* ── 7. OPEN LIBRARY — reference books in Crow session ── */
+async function findReferenceBooks() {
+  const subjectEl = document.getElementById('scroll_subject');
+  const topicEl   = document.getElementById('scroll_topic');
+  const panel     = document.getElementById('refBooksPanel');
+  const list      = document.getElementById('refBooksList');
+  if (!panel || !list) return;
+  const query = (subjectEl && subjectEl.options[subjectEl.selectedIndex] && subjectEl.options[subjectEl.selectedIndex].text !== '— Select —'
+    ? subjectEl.options[subjectEl.selectedIndex].text
+    : '') || (topicEl && topicEl.value.trim()) || '';
+  if (!query) { notify('Select a subject or enter a topic first', 'info'); return; }
+  panel.style.display = 'block';
+  list.innerHTML = '<span style="font-size:12px;color:var(--text3)">🔍 Searching Open Library…</span>';
+  try {
+    const res = await fetch('https://openlibrary.org/search.json?subject=' + encodeURIComponent(query) + '&limit=3&fields=title,author_name,cover_i,key');
+    if (!res.ok) throw new Error('fail');
+    const data = await res.json();
+    if (!data.docs || !data.docs.length) { list.innerHTML = '<span style="font-size:12px;color:var(--text3)">No books found for "' + query + '"</span>'; return; }
+    list.innerHTML = data.docs.slice(0, 3).map(b => {
+      const cover = b.cover_i ? 'https://covers.openlibrary.org/b/id/' + b.cover_i + '-M.jpg' : '';
+      const author = b.author_name ? b.author_name[0] : 'Unknown author';
+      const link = 'https://openlibrary.org' + b.key;
+      return '<a href="' + link + '" target="_blank" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:5px;max-width:90px">'
+        + (cover ? '<img src="' + cover + '" style="width:60px;height:80px;object-fit:cover;border-radius:4px;border:1px solid var(--border)">' : '<div style="width:60px;height:80px;background:var(--bg3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px">📚</div>')
+        + '<span style="font-size:10px;color:var(--text2);text-align:center;line-height:1.3">' + b.title.slice(0, 40) + '</span>'
+        + '<span style="font-size:9px;color:var(--text3);text-align:center">' + author + '</span>'
+        + '</a>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<span style="font-size:12px;color:var(--text3)">Could not reach Open Library</span>';
+  }
+}
+
+/* ── 8. WIZARD WORLD — HP spell in sidebar when HP theme active ── */
+async function loadHPSpell() {
+  const bar = document.getElementById('hpSpellBar');
+  if (!bar) return;
+  try {
+    const res = await fetch('https://wizard-world-api.herokuapp.com/Spells?Limit=1&Offset=' + Math.floor(Math.random() * 200));
+    if (!res.ok) return;
+    const data = await res.json();
+    const spell = data && data[0];
+    if (!spell) return;
+    document.getElementById('hpSpellName').textContent = spell.name || '';
+    document.getElementById('hpSpellEffect').textContent = (spell.effect || spell.type || '').slice(0, 60);
+    bar.style.display = 'block';
+  } catch(e) {}
+}
+function hideHPSpell() {
+  const bar = document.getElementById('hpSpellBar');
+  if (bar) bar.style.display = 'none';
+}
+// Watch theme changes to show/hide HP spell bar
+const _origSetTheme = window.setTheme;
+window.setTheme = function(t) {
+  if (_origSetTheme) _origSetTheme.apply(this, arguments);
+  const isHP = t && (t.includes('hogwarts') || t.includes('gryffindor') || t.includes('slytherin'));
+  if (isHP) loadHPSpell();
+  else hideHPSpell();
+};
+// Check on load
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('kimetsuTheme') || '';
+  if (saved.includes('hogwarts') || saved.includes('gryffindor') || saved.includes('slytherin')) loadHPSpell();
+});
+</script>
 </body>
 </html>
